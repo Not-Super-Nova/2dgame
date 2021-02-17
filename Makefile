@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := usage
 
-2DLIBS = -pthread -lSDL2 -lGL -lm -lSDL2_image -lSDL2_mixer -lSDL2_ttf
+2DLIBS = 
 COMPILER = g++
 FORMATTER = clang-format -i
 BUILDDIR = build
