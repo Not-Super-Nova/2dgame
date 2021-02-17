@@ -1,20 +1,33 @@
-.DEFAULT_GOAL := build
+.DEFAULT_GOAL := usage
 
-2DLIBS = -lsimple2d -I/usr/include/SDL2 -D_REENTRANT -L/usr/lib -pthread -lSDL2 -lGL -lm -lSDL2_image -lSDL2_mixer -lSDL2_ttf
-build: 
+2DLIBS = -pthread -lSDL2 -lGL -lm -lSDL2_image -lSDL2_mixer -lSDL2_ttf
+COMPILER = g++
+FORMATTER = clang-format -i
+BUILDDIR = build
+
+usage:
+	@echo "USAGE:"
+	@echo "make build to build"
+	@echo "make pretty to make the code pretty"
+	@echo "make clean to make it clean"
+	@echo "make remake to remake"
+
+pretty:
+	@echo "Linting CPP files"
+	@${FORMATTER} src/*.cpp
+
+build: pretty
 	@echo "Creating build directory"
-	@mkdir build/
-	@echo "Formatting CPP files with clang-format"
-	@clang-format -i src/*.cpp
+	@mkdir ${BUILDDIR}/
 	@echo "Compiling main.cpp"
-	@g++ src/main.cpp ${2DLIBS} -o build/game
+	@${COMPILER} src/main.cpp ${2DLIBS} -o ${BUILDDIR}/game
 	@echo "Enabling execute permission"
-	@chmod +x build/game
+	@chmod +x ${BUILDDIR}/game
 	@echo "Copying media files"
-	@cp -r media build
+	@cp -r media ${BUILDDIR}
 
 clean: 
 	@echo "Deleting build directory..."
-	@rm -rf build/
+	@rm -rf ${BUILDDIR}/
 
 remake: clean build
