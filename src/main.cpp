@@ -1,6 +1,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_error.h>
 #include <SDL2/SDL_events.h>
+#include <SDL2/SDL_hints.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_keycode.h>
 #include <SDL2/SDL_surface.h>
@@ -28,10 +29,11 @@ bool init() {
     printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
     success = false;
   } else {
-
-    gWindow = SDL_CreateWindow(gcWindowTitle, SDL_WINDOWPOS_UNDEFINED,
-                               SDL_WINDOWPOS_UNDEFINED, gcScreenWidth,
-                               gcScreenHeight, SDL_WINDOW_SHOWN);
+    SDL_SetHint(SDL_HINT_RENDER_VSYNC, "1");
+    gWindow =
+        SDL_CreateWindow(gcWindowTitle, SDL_WINDOWPOS_UNDEFINED,
+                         SDL_WINDOWPOS_UNDEFINED, gcScreenWidth, gcScreenHeight,
+                         SDL_WINDOW_SHOWN | SDL_WINDOW_FULLSCREEN);
     if (gWindow == NULL) {
       printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
       success = false;
