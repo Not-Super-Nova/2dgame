@@ -30,4 +30,8 @@ clean:
 	@echo "Deleting build directory..."
 	@rm -rf ${BUILDDIR}/
 
+testmedia:
+	@echo "Creating test media"
+	@./testmedia.sh
+
 remake: clean build
