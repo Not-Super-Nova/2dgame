@@ -2,9 +2,9 @@
 SDL_Window *gWindow = NULL;
 SDL_Surface *gScreenSurface = NULL;
 SDL_Surface *gTestImage = NULL;
-const int SCREEN_WIDTH = 640;
-const int SCREEN_HEIGHT = 480;
-const char *WINDOW_TITLE = "Simple 2D Game";
+const int gcScreenWidth = 640;
+const int gcScreenHeight = 480;
+const char *gcWindowTitle = "Simple 2D Game";
 enum KeyPressSurfaces {
   KEY_PRESS_SURFACE_DEFAULT,
   KEY_PRESS_SURFACE_UP,
