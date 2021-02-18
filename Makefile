@@ -1,7 +1,7 @@
 .DEFAULT_GOAL := usage
 
-2DLIBS = 
-COMPILER = g++
+2DLIBS = -L/usr/lib -pthread -lSDL2 -lSDL2_image
+COMPILER = g++ -ggdb
 FORMATTER = clang-format -i
 BUILDDIR = build
 
@@ -13,8 +13,8 @@ usage:
 	@echo "make remake to remake"
 
 pretty:
-	@echo "Linting CPP files"
-	@${FORMATTER} src/*.cpp
+	@echo "Linting"
+	@${FORMATTER} src/*.cpp src/*.h
 
 build: pretty
 	@echo "Creating build directory"
