@@ -2,9 +2,11 @@
 #include <SDL2/SDL_error.h>
 #include <SDL2/SDL_events.h>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_keycode.h>
 #include <SDL2/SDL_surface.h>
 #include <SDL2/SDL_video.h>
 #include <stdio.h>
+#include <string.h>
 
 #include "constants.h"
 
@@ -42,8 +44,37 @@ bool init() {
 }
 
 bool loadMedia() {
+  // Loading success flag
   bool success = true;
-  gTestImage = loadSurface((char *)"media/testTile.png");
+
+  gKeyPressSurfaces[KEY_PRESS_SURFACE_DEFAULT] =
+      loadSurface((char *)"media/Default.png");
+  if (gKeyPressSurfaces[KEY_PRESS_SURFACE_DEFAULT] == NULL) {
+    printf("Failed to load %s", "Default.png");
+    success = false;
+  }
+
+  gKeyPressSurfaces[KEY_PRESS_SURFACE_W] = loadSurface((char *)"media/W.png");
+  if (gKeyPressSurfaces[KEY_PRESS_SURFACE_W] == NULL) {
+    printf("Failed to load %s", "W.png");
+    success = false;
+  }
+  gKeyPressSurfaces[KEY_PRESS_SURFACE_S] = loadSurface((char *)"media/S.png");
+  if (gKeyPressSurfaces[KEY_PRESS_SURFACE_S] == NULL) {
+    printf("Failed to load %s", "S.png");
+    success = false;
+  }
+  gKeyPressSurfaces[KEY_PRESS_SURFACE_A] = loadSurface((char *)"media/A.png");
+  if (gKeyPressSurfaces[KEY_PRESS_SURFACE_A] == NULL) {
+    printf("Failed to load %s", "A.png");
+    success = false;
+  }
+  gKeyPressSurfaces[KEY_PRESS_SURFACE_D] = loadSurface((char *)"media/D.png");
+  if (gKeyPressSurfaces[KEY_PRESS_SURFACE_D] == NULL) {
+    printf("Failed to load %s", "D.png");
+    success = false;
+  }
+
   return success;
 }
 
@@ -70,14 +101,43 @@ int main(int argc, char *args[]) {
 
       bool quit = false;
       SDL_Event e;
+      gCurrentSurface = gKeyPressSurfaces[KEY_PRESS_SURFACE_DEFAULT];
 
       while (!quit) {
         while (SDL_PollEvent(&e) != 0) {
-          if (e.type == SDL_QUIT) {
+          switch (e.type) {
+          case SDL_QUIT:
             printf("Quit requested, shutting down");
             quit = true;
+            break;
+          case SDL_KEYDOWN:
+            switch (e.key.keysym.sym) {
+            case SDLK_w:
+              gCurrentSurface = gKeyPressSurfaces[KEY_PRESS_SURFACE_W];
+              break;
+            case SDLK_s:
+              gCurrentSurface = gKeyPressSurfaces[KEY_PRESS_SURFACE_S];
+              break;
+            case SDLK_a:
+              gCurrentSurface = gKeyPressSurfaces[KEY_PRESS_SURFACE_A];
+              break;
+            case SDLK_d:
+              gCurrentSurface = gKeyPressSurfaces[KEY_PRESS_SURFACE_D];
+              break;
+            default:
+              gCurrentSurface = gKeyPressSurfaces[KEY_PRESS_SURFACE_DEFAULT];
+              break;
+            }
+            break;
+
+          case SDL_KEYUP:
+            gCurrentSurface = gKeyPressSurfaces[KEY_PRESS_SURFACE_DEFAULT];
+            break;
           }
         }
+        SDL_BlitSurface(gCurrentSurface, NULL, gScreenSurface, NULL);
+
+        SDL_UpdateWindowSurface(gWindow);
       }
     }
   }
