@@ -2,8 +2,8 @@
 // Created by nova on 19/02/2021.
 //
 
-#ifndef INC_2DGAME_SPRITE_H
-#define INC_2DGAME_SPRITE_H
+#ifndef INC_2DGAME_SPRITE_HPP
+#define INC_2DGAME_SPRITE_HPP
 
 #include <SDL2/SDL.h>
 
@@ -47,4 +47,4 @@ public:
   SDL_Rect *rect;
 };
 
-#endif// INC_2DGAME_SPRITE_H
+#endif// INC_2DGAME_SPRITE_HPP

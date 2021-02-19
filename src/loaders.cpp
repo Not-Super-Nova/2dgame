@@ -1,9 +1,8 @@
 //
 // Created by nova on 19/02/2021.
 //
-
-#include "loaders.h"
-#include "main.h"
+#include "loaders.hpp"
+#include "main.hpp"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_keyboard.h>

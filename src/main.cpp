@@ -6,10 +6,10 @@
 #include <cstdio>
 #include <cstring>
 
-#include "loaders.h"
-#include "sprite.h"
+#include "loaders.hpp"
+#include "sprite.hpp"
 
-#include "main.h"
+#include "main.hpp"
 
 int gScreenWidth = 512;
 int gScreenHeight = 512;
