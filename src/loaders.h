@@ -12,4 +12,4 @@ bool loadMedia();
 SDL_Texture *loadTexture(char *path);
 SDL_Surface *loadSurface(char *path);
 
-#endif // INC_2DGAME_LOADERS_H
+#endif// INC_2DGAME_LOADERS_H

@@ -32,7 +32,7 @@ bool init() {
     }
   }
 
-  gKeyboardState = (Uint8 *)SDL_GetKeyboardState(NULL);
+  gKeyboardState = (Uint8 *) SDL_GetKeyboardState(NULL);
 
   return success;
 }
@@ -63,7 +63,7 @@ bool loadMedia() {
   // Loading success flag
   bool success = true;
 
-  gCharacterImage = loadTexture((char *)"media/character.png");
+  gCharacterImage = loadTexture((char *) "media/character.png");
 
   return success;
 }

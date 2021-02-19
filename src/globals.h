@@ -13,4 +13,4 @@ Uint8 *gKeyboardState;
 int gMovementSpeed = 2;
 SDL_Texture *gCharacterImage = NULL;
 
-#endif // INC_2DGAME_GLOBALS_H
+#endif// INC_2DGAME_GLOBALS_H

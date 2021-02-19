@@ -1,13 +1,7 @@
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_error.h>
 #include <SDL2/SDL_events.h>
-#include <SDL2/SDL_hints.h>
-#include <SDL2/SDL_image.h>
-#include <SDL2/SDL_keyboard.h>
 #include <SDL2/SDL_keycode.h>
 #include <SDL2/SDL_render.h>
-#include <SDL2/SDL_stdinc.h>
-#include <SDL2/SDL_surface.h>
 #include <SDL2/SDL_video.h>
 #include <cstdio>
 #include <cstring>
@@ -20,6 +14,8 @@
 #include "constants.h"
 
 #include "globals.h"
+
+Sprite *createPlayer();
 
 void close() {
 
@@ -43,18 +39,7 @@ int main(int argc, char *args[]) {
       printf("Failed to load media!\n");
     } else {
       bool quit = false;
-      Sprite *playerCharacter =
-          new Sprite(gCharacterImage, 0.0f, 0.0f, 128, 128, 0);
-      playerCharacter->currentMap = 0;
-      playerCharacter->texture = gCharacterImage;
-      int width, height;
-      SDL_QueryTexture(playerCharacter->texture, NULL, NULL, &width, &height);
-      playerCharacter->height = width;
-      playerCharacter->width = height;
-      playerCharacter->rect->w = width;
-      playerCharacter->rect->h = height;
-      playerCharacter->locationX = 0.0f;
-      playerCharacter->locationY = 0.0f;
+      Sprite *playerCharacter = createPlayer();
 
       while (!quit) {
         if (gKeyboardState[SDL_SCANCODE_ESCAPE]) {
@@ -87,4 +72,20 @@ int main(int argc, char *args[]) {
   close();
 
   return 0;
+}
+
+Sprite *createPlayer() {
+  Sprite *playerCharacter;
+  playerCharacter = new Sprite(gCharacterImage, 0.0f, 0.0f, 128, 128, 0);
+  playerCharacter->currentMap = 0;
+  playerCharacter->texture = gCharacterImage;
+  int width, height;
+  SDL_QueryTexture(playerCharacter->texture, NULL, NULL, &width, &height);
+  playerCharacter->height = width;
+  playerCharacter->width = height;
+  playerCharacter->rect->w = width;
+  playerCharacter->rect->h = height;
+  playerCharacter->locationX = 0.0f;
+  playerCharacter->locationY = 0.0f;
+  return playerCharacter;
 }

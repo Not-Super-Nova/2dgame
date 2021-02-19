@@ -47,4 +47,4 @@ public:
   SDL_Rect *rect;
 };
 
-#endif // INC_2DGAME_SPRITE_H
+#endif// INC_2DGAME_SPRITE_H
