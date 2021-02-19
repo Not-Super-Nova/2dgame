@@ -11,6 +11,16 @@
 
 #include "main.h"
 
+int gScreenWidth = 512;
+int gScreenHeight = 512;
+char *gcWindowTitle = (char*) "2D Game";
+
+SDL_Window *gWindow;
+SDL_Renderer *gRenderer;
+Uint8 *gKeyboardState;
+int gMovementSpeed;
+SDL_Texture *gCharacterImage;
+
 Sprite *createPlayer();
 
 void close() {
@@ -28,6 +38,10 @@ void close() {
 }
 
 int main(int argc, char *args[]) {
+  gScreenWidth = 512;
+  gScreenHeight = 512;
+  gcWindowTitle = (char*) "Simple 2D Game";
+  gMovementSpeed = 2;
   if (!init()) {
     printf("Failed to initialize!\n");
     return -1;

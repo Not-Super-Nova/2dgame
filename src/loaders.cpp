@@ -19,7 +19,7 @@ bool init() {
     SDL_SetHint(SDL_HINT_RENDER_VSYNC, "1");
     gWindow =
         SDL_CreateWindow(gcWindowTitle, SDL_WINDOWPOS_UNDEFINED,
-                         SDL_WINDOWPOS_UNDEFINED, gcScreenWidth, gcScreenHeight,
+                         SDL_WINDOWPOS_UNDEFINED, gScreenWidth, gScreenHeight,
                          SDL_WINDOW_SHOWN /*| SDL_WINDOW_FULLSCREEN*/);
     if (gWindow == NULL) {
       printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());

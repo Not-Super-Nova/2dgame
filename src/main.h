@@ -7,12 +7,12 @@ typedef struct {
   int locationY;
 } Tile;
 
-const int gcScreenWidth = 512;
-const int gcScreenHeight = 512;
-const char *gcWindowTitle = "Simple 2D Game";
+extern int gScreenWidth;
+extern int gScreenHeight;
+extern char *gcWindowTitle;
 
-SDL_Window *gWindow = NULL;
-SDL_Renderer *gRenderer = NULL;
-Uint8 *gKeyboardState;
-int gMovementSpeed = 2;
-SDL_Texture *gCharacterImage = NULL;
+extern SDL_Window *gWindow;
+extern SDL_Renderer *gRenderer;
+extern Uint8 *gKeyboardState;
+extern int gMovementSpeed;
+extern SDL_Texture *gCharacterImage;
