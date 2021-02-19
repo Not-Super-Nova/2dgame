@@ -11,10 +11,6 @@
 
 #include "main.h"
 
-#include "constants.h"
-
-#include "globals.h"
-
 Sprite *createPlayer();
 
 void close() {
@@ -34,9 +30,11 @@ void close() {
 int main(int argc, char *args[]) {
   if (!init()) {
     printf("Failed to initialize!\n");
+    return -1;
   } else {
     if (!loadMedia()) {
       printf("Failed to load media!\n");
+      return -1;
     } else {
       bool quit = false;
       Sprite *playerCharacter = createPlayer();

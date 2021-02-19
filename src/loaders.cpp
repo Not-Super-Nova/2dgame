@@ -3,8 +3,7 @@
 //
 
 #include "loaders.h"
-#include "constants.h"
-#include "globals.h"
+#include "main.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_keyboard.h>
@@ -60,7 +59,6 @@ SDL_Texture *loadTexture(char *path) {
 }
 
 bool loadMedia() {
-  // Loading success flag
   bool success = true;
 
   gCharacterImage = loadTexture((char *) "media/character.png");
