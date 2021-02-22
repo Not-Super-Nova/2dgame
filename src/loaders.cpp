@@ -44,7 +44,6 @@ SDL_Surface *loadSurface(char *path) {
   } else {
     return loadedSurface;
   }
-  return loadedSurface;
 }
 
 SDL_Texture *loadTexture(char *path) {

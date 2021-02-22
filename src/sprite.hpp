@@ -9,7 +9,7 @@
 
 class Sprite {
 public:
-  Sprite(SDL_Texture *texture, float locationX, float locationY, int width,
+  Sprite(SDL_Texture *texture, int locationX, int locationY, int width,
          int height, int currentMap) {
     this->texture = texture;
     this->locationX = locationX;
@@ -29,10 +29,10 @@ public:
   SDL_Texture *texture;
 
 public:
-  float locationX;
+  int locationX;
 
 public:
-  float locationY;
+  int locationY;
 
 public:
   int width;

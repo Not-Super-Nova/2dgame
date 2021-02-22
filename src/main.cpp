@@ -8,6 +8,7 @@
 
 #include "loaders.hpp"
 #include "sprite.hpp"
+#include "map.hpp"
 
 #include "main.hpp"
 
@@ -20,6 +21,8 @@ SDL_Renderer *gRenderer;
 Uint8 *gKeyboardState;
 int gMovementSpeed;
 SDL_Texture *gCharacterImage;
+
+volatile map *Map;
 
 Sprite *createPlayer();
 
@@ -37,7 +40,8 @@ void close() {
   SDL_Quit();
 }
 
-int main(int argc, char *args[]) {
+int main(int argc, char *argv[]) {
+  Map = new map((char*)"/home/nova/2dgame/media/test1", (char*)"/home/nova/2dgame/media/test2", 512, 512, 4, 4);
   gScreenWidth = 512;
   gScreenHeight = 512;
   gcWindowTitle = (char*) "Simple 2D Game";
@@ -97,7 +101,7 @@ Sprite *createPlayer() {
   playerCharacter->width = height;
   playerCharacter->rect->w = width;
   playerCharacter->rect->h = height;
-  playerCharacter->locationX = 0.0f;
-  playerCharacter->locationY = 0.0f;
+  playerCharacter->locationX = 0;
+  playerCharacter->locationY = 0;
   return playerCharacter;
 }
