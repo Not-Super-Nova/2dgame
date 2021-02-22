@@ -3,7 +3,7 @@
 //
 
 #include "map.hpp"
-#include <cassert>
+#include "loaders.hpp"
 #include <sys/stat.h>
 
 bool map::valid() {
@@ -13,18 +13,61 @@ bool map::valid() {
   }
   return true;
 }
-map::map(char *tilePath, char *collisionDataPath, int tileWidth, int tileHeight, int tileCountX, int tileCountY) {
+map::map(char *tilePath, char *dataPath, int tileWidth, int tileHeight, int tileCountX, int tileCountY) {
   bool error = false;
   int tilePathType = statFile(tilePath);
-  printf("%i\n", (int*)tilePathType);
-  int collisionDataPathType = statFile(collisionDataPath);
-  printf("%i\n", (int*)collisionDataPathType);
+  int collisionDataPathType = statFile(dataPath);
   if (tilePathType == 1 && collisionDataPathType == 1)
   {
-    printf("Directories %s and %s are valid", tilePath, collisionDataPath);
+    printf("Directories %s and %s are valid", tilePath, dataPath);
+    char*texturePath;
+    sprintf(texturePath, "%s/%i.png", tilePath, 0);
+    printf("%s", texturePath);
+    tiles[0] = loadTexture(texturePath);
+    SDL_QueryTexture(tiles[0], NULL, NULL, &this->tileWidth, &this->tileHeight);
+    for (int i = 1; i < 32; i++)
+    {
+      texturePath = NULL;
+      sprintf(texturePath, "%s/%i.png", tilePath, i);
+      printf("%s", texturePath);
+      tiles[i] = loadTexture(texturePath);
+      if (tiles[i] == NULL)
+      {
+        i = 32;
+      }
+      int temph;
+      int tempw;
+      SDL_QueryTexture(tiles[i], NULL, NULL, &tempw, &temph);
+      if (tempw != this->tileWidth || temph != this->tileHeight) {
+        error = true;
+        i = 32;
+      }
+
+    }
+    char* infoPath;
+    sprintf(infoPath, "%s/%s.data", dataPath, "map");
+    // Unsure of following
+    //FILE *mapDataFileHandle = fopen(infoPath, "r");
+    //char* buf[1024];
+    //fread(&mapDataFileHandle, 1024, 0, mapDataFileHandle);
   }
   else
+  {
+    if (tilePathType != 1)
+    {
+      printf("Path %s is invalid", tilePath);
+    }
+    if (collisionDataPathType != 1)
+    {
+      printf("Path %s is invalid", dataPath);
+    }
     error = true;
+    return;
+  }
+  if (error)
+  {
+    throw;
+  }
 }
 int map::statFile(const char *path) {
   struct stat info{};

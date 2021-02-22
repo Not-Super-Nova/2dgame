@@ -12,7 +12,8 @@
 class gameManager {
   tm *gameTime;
   map *currentMap;
-  Sprite *player;
+  playerCharacter *players[];
+  character *characters[]
 };
 
 #endif//INC_2DGAME_GAMEMANAGER_HPP
