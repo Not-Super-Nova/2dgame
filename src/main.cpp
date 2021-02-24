@@ -6,6 +6,7 @@
 #include <cstdio>
 #include <cstring>
 
+#include "character.hpp"
 #include "loaders.hpp"
 #include "sprite.hpp"
 #include "map.hpp"
@@ -22,9 +23,9 @@ Uint8 *gKeyboardState;
 int gMovementSpeed;
 SDL_Texture *gCharacterImage;
 
-volatile map *Map;
+volatile map *currentMap;
 
-Sprite *createPlayer();
+character *createPlayer();
 
 void close() {
 
@@ -41,7 +42,7 @@ void close() {
 }
 
 int main(int argc, char *argv[]) {
-  Map = new map((char*)"/home/nova/2dgame/media/test1", (char*)"/home/nova/2dgame/media/test2", 512, 512, 4, 4);
+  currentMap = new map((char*)"/home/nova/2dgame/media/test1", (char*)"/home/nova/2dgame/media/test2", 512, 512, 4, 4);
   gScreenWidth = 512;
   gScreenHeight = 512;
   gcWindowTitle = (char*) "Simple 2D Game";
@@ -55,7 +56,7 @@ int main(int argc, char *argv[]) {
       return -1;
     } else {
       bool quit = false;
-      Sprite *playerCharacter = createPlayer();
+      character *playerCharacter = createPlayer();
 
       while (!quit) {
         if (gKeyboardState[SDL_SCANCODE_ESCAPE]) {
@@ -77,6 +78,37 @@ int main(int argc, char *argv[]) {
         SDL_RenderClear(gRenderer);
         playerCharacter->rect->x = playerCharacter->locationX;
         playerCharacter->rect->y = playerCharacter->locationY;
+        // Calculate render port
+        SDL_Rect *tileRenderBoundary = new SDL_Rect();
+        vector tempViewportVector = playerCharacter->centerPos();
+        tileRenderBoundary->x = tempViewportVector.x - currentMap->tileWidth;
+        tileRenderBoundary->y = tempViewportVector.y - currentMap->tileHeight;
+        tileRenderBoundary->w = gScreenWidth + currentMap->tileWidth;
+        tileRenderBoundary->h = gScreenHeight + currentMap->tileHeight;
+        int countX = 0;
+        int countY = 0;
+        for (int tileIndex = 0; tileIndex < currentMap->tileCountTotal; tileIndex++)
+        {
+          if (countX == currentMap->tileCountX)
+          {
+            countX = 0;
+            countY ++;
+          }
+          SDL_Point *tilePos = new SDL_Point();
+          tilePos->x = currentMap->tileWidth * countX;
+          tilePos->y = currentMap->tileHeight * countY;
+          if (SDL_PointInRect(tilePos, tileRenderBoundary))
+          {
+            SDL_Rect *temp = new SDL_Rect();
+            temp->x = tilePos->x;
+            temp->y = tilePos->y;
+            temp->w = currentMap->tileWidth;
+            temp->h = currentMap->tileHeight;
+            SDL_RenderCopy(gRenderer, currentMap->tiles[tileIndex], NULL, temp);
+            SDL_RenderPresent(gRenderer);
+            SDL_RenderFillRect(gRenderer, temp);
+          }
+        }
         SDL_RenderCopy(gRenderer, playerCharacter->texture, NULL,
                        playerCharacter->rect);
         SDL_RenderPresent(gRenderer);
@@ -90,9 +122,9 @@ int main(int argc, char *argv[]) {
   return 0;
 }
 
-Sprite *createPlayer() {
-  Sprite *playerCharacter;
-  playerCharacter = new Sprite(gCharacterImage, 0.0f, 0.0f, 128, 128, 0);
+character *createPlayer() {
+  character *playerCharacter;
+  playerCharacter = new character(gCharacterImage, 0.0f, 0.0f, 128, 128, 0, 4);
   playerCharacter->currentMap = 0;
   playerCharacter->texture = gCharacterImage;
   int width, height;
@@ -101,7 +133,5 @@ Sprite *createPlayer() {
   playerCharacter->width = height;
   playerCharacter->rect->w = width;
   playerCharacter->rect->h = height;
-  playerCharacter->locationX = 0;
-  playerCharacter->locationY = 0;
   return playerCharacter;
 }

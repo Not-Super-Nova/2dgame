@@ -35,3 +35,10 @@ character::character(SDL_Texture *texture, int locationX, int locationY, int wid
   this->_movementSpeed = movementSpeed;
   this->_slowMovementSpeed = movementSpeed/2;
 }
+vector character::centerPos() {
+  int tempX = width / 2;
+  int tempY = height / 2;
+  tempX += locationX;
+  tempY += locationY;
+  return vector(tempX, tempY);
+}

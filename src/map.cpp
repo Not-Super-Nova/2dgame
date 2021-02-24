@@ -33,19 +33,19 @@ map::map(char *tilePath, char *dataPath, int tileWidth, int tileHeight, int tile
       tiles[i] = loadTexture(texturePath);
       if (tiles[i] == NULL)
       {
+        tileCountTotal = i + 1;
         i = 32;
       }
       int temph;
       int tempw;
       SDL_QueryTexture(tiles[i], NULL, NULL, &tempw, &temph);
       if (tempw != this->tileWidth || temph != this->tileHeight) {
-        error = true;
-        i = 32;
+        throw mapLoadingException();
       }
 
     }
-    char* infoPath;
-    sprintf(infoPath, "%s/%s.data", dataPath, "map");
+    //char* infoPath;
+    //sprintf(infoPath, "%s/%s.data", dataPath, "map");
     // Unsure of following
     //FILE *mapDataFileHandle = fopen(infoPath, "r");
     //char* buf[1024];
@@ -61,12 +61,7 @@ map::map(char *tilePath, char *dataPath, int tileWidth, int tileHeight, int tile
     {
       printf("Path %s is invalid", dataPath);
     }
-    error = true;
-    return;
-  }
-  if (error)
-  {
-    throw;
+    throw mapLoadingException();
   }
 }
 int map::statFile(const char *path) {
@@ -86,4 +81,7 @@ int map::statFile(const char *path) {
     printf("%s is file\n", path);
     return 2;
   }
+}
+SDL_Texture *map::render(SDL_Rect viewport) {
+  return tiles[1];
 }

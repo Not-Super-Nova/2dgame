@@ -5,7 +5,7 @@ If you feel like there is anything missing, submit a PR with an explanation of w
 
 ## gameManager
 - Game time tracking, including functions to get, set, and advance by X amount of time
-- Map tracking. Pointer to `mapManager`, and index (likely through enum) for current map
+- currentMap tracking. Pointer to `mapManager`, and index (likely through enum) for current map
 - Character tracking, both PCs and NPCs. Array of pointers to `character` objects.
 
 ## mapManager

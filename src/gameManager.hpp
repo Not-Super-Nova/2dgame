@@ -7,13 +7,14 @@
 
 #include "map.hpp"
 #include "sprite.hpp"
+#include "character.hpp"
 #include <ctime>
 
 class gameManager {
   tm *gameTime;
   map *currentMap;
-  playerCharacter *players[];
-  character *characters[]
+  //playerCharacter *players[];
+  character *characters[];
 };
 
 #endif//INC_2DGAME_GAMEMANAGER_HPP

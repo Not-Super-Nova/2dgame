@@ -21,10 +21,11 @@ enum moveDirection {
   MOVE_NONE
 };
 
-class character : Sprite{
+class character : public Sprite{
 public: character(SDL_Texture *texture, int locationX, int locationY, int width, int height, int currentMap, int movementSpeed);
   int _movementSpeed;
   int _slowMovementSpeed;
+public: vector centerPos();
 public: moveDirection calculateMovement();
 public: void move(int deltaX, int deltaY);
 public: void setLocation (map Map, vector Location);
