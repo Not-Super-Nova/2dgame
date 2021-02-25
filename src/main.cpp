@@ -78,11 +78,11 @@ int main(int argc, char *argv[]) {
 
       if(gScreenWidth < gScreenHeight)
       {
-        cameraMovementBoundary = 0;//gScreenWidth / 2;
+        cameraMovementBoundary = gScreenWidth / 2;
       }
       else
       {
-        cameraMovementBoundary = 0;//gScreenHeight / 2;
+        cameraMovementBoundary = gScreenHeight / 2;
       }
 
       while (!quit) {
@@ -104,9 +104,9 @@ int main(int argc, char *argv[]) {
         }
 
         dstToWest = player->worldPos->x;
-        dstToEast = currentMap->pixelCountX() - player->worldPos->x;
+        dstToEast = currentMap->pixelCountX() - player->worldPos->x - player->width;
         dstToNorth = player->worldPos->y;
-        dstToSouth = currentMap->pixelCountY() - player->worldPos->y;
+        dstToSouth = currentMap->pixelCountY() - player->worldPos->y - player->height;
 
         if (dstToWest < cameraMovementBoundary)
         {

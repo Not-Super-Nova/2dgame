@@ -24,8 +24,8 @@ character::character(SDL_Texture *texture, SDL_Point *worldPos, map *currentMap,
 }
 SDL_Point *character::screenPos(vector *offset) {
   SDL_Point *output = new SDL_Point();
-  output->x = this->worldPos->x + offset->x;
-  output->y = this->worldPos->y + offset->y;
+  output->x = this->worldPos->x - offset->x;
+  output->y = this->worldPos->y - offset->y;
   return output;
 }
 void character::setCoords(SDL_Point *worldspace) {
