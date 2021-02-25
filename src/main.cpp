@@ -69,22 +69,6 @@ int main(int argc, char *argv[]) {
       cameraWorldPos->x = 0;
       cameraWorldPos->y = 0;
 
-      int dstToWest = 0;
-      int dstToEast = 0;
-      int dstToNorth = 0;
-      int dstToSouth = 0;
-
-      int cameraMovementBoundary;
-
-      if(gScreenWidth < gScreenHeight)
-      {
-        cameraMovementBoundary = gScreenWidth / 2;
-      }
-      else
-      {
-        cameraMovementBoundary = gScreenHeight / 2;
-      }
-
       while (!quit) {
         if (gKeyboardState[SDL_SCANCODE_ESCAPE]) {
           printf("Quit requested, shutting down");
@@ -103,36 +87,15 @@ int main(int argc, char *argv[]) {
           player->move(gMovementSpeed, 0);
         }
 
-        dstToWest = player->worldPos->x;
-        dstToEast = currentMap->pixelCountX() - player->worldPos->x - player->width;
-        dstToNorth = player->worldPos->y;
-        dstToSouth = currentMap->pixelCountY() - player->worldPos->y - player->height;
-
-        if (dstToWest < cameraMovementBoundary)
-        {
-          cameraWorldPos->x = cameraMovementBoundary;
-        }
-        else if (dstToEast < cameraMovementBoundary)
-        {
-          cameraWorldPos->x = currentMap->pixelCountX() - cameraMovementBoundary;
-        }
+        if (player->worldPos->x < (gScreenWidth * 0.5) - (player->width * 0.5))
+          cameraWorldPos->x = 0;
         else
-        {
-          cameraWorldPos->x = player->worldPos->x;
-        }
+          cameraWorldPos->x = player->worldPos->x - (gScreenWidth * 0.5) + (player->width * 0.5);
 
-        if (dstToNorth < cameraMovementBoundary)
-        {
-          cameraWorldPos->y = cameraMovementBoundary;
-        }
-        else if (dstToSouth < cameraMovementBoundary)
-        {
-          cameraWorldPos->y = currentMap->pixelCountY() - cameraMovementBoundary;
-        }
+        if (player->worldPos->y < (gScreenHeight * 0.5) - (player->height * 0.5))
+          cameraWorldPos->y = 0;
         else
-        {
-          cameraWorldPos->y = player->worldPos->y;
-        }
+          cameraWorldPos->y = player->worldPos->y - (gScreenHeight * 0.5) + (player->height * 0.5);
 
         SDL_Rect *renderBoundary = new SDL_Rect();
         renderBoundary->x = 0;
