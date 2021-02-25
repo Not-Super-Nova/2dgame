@@ -2,18 +2,19 @@
 // Created by nova on 19/02/2021.
 //
 
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+#include <SDL2/SDL_pixels.h>
+#include <SDL2/SDL_render.h>
 #include "sprite.hpp"
-Sprite::Sprite(SDL_Texture *texture, int locationX, int locationY, int width, int height, int currentMap) {
+
+Sprite::Sprite(SDL_Texture *texture, SDL_Point *worldPos, map *currentMap) {
   this->texture = texture;
-  this->locationX = locationX;
-  this->locationY = locationY;
-  this->width = width;
-  this->height = height;
+  int tempWidth = 0;
+  int tempHeight = 0;
+  SDL_QueryTexture(texture, NULL, NULL, &tempWidth, &tempHeight);
+  this->width = tempWidth;
+  this->height = tempHeight;
+  this->worldPos = worldPos;
   this->currentMap = currentMap;
-  SDL_Rect *temp = new SDL_Rect();
-  temp->x = this->locationX;
-  temp->y = this->locationY;
-  temp->h = this->height;
-  temp->w = this->width;
-  this->rect = temp;
 }

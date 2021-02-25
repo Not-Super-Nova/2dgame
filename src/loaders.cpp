@@ -17,8 +17,8 @@ bool init() {
   } else {
     SDL_SetHint(SDL_HINT_RENDER_VSYNC, "1");
     if (gDebug) {
-      gScreenWidth = 480;
-      gScreenHeight = 640;
+      gScreenWidth = 1280;
+      gScreenHeight = 720;
       gWindow = SDL_CreateWindow(gcWindowTitle, SDL_WINDOWPOS_UNDEFINED,
                            SDL_WINDOWPOS_UNDEFINED, gScreenWidth, gScreenHeight,
                            SDL_WINDOW_SHOWN /*| SDL_WINDOW_FULLSCREEN*/);

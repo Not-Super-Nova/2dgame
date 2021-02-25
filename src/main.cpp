@@ -24,7 +24,7 @@ int gMovementSpeed;
 SDL_Texture *gCharacterImage;
 bool gDebug;
 
-volatile map *currentMap;
+map *currentMap;
 
 character *createPlayer();
 
@@ -47,7 +47,7 @@ int main(int argc, char *argv[]) {
   gScreenHeight = 1080;
   gcWindowTitle = (char*) "Simple 2D Game";
   gMovementSpeed = 5;
-  gDebug = false;
+  gDebug = true;
   if (!init()) {
     printf("Failed to initialize!\n");
     return -1;
@@ -58,9 +58,32 @@ int main(int argc, char *argv[]) {
     } else {
       // Load test map
       // TODO: remove this, and replace with loading maps from saves / source
-      currentMap = new map((char*)"/home/nova/2dgame/media/testMap", (char*)"/home/nova/2dgame/media/testMap", 128, 128, 3, 1);
+      currentMap = new map((char*)"/home/nova/2dgame/media/testMap", (char*)"/home/nova/2dgame/media/testMap", 512, 512, 4, 8);
       bool quit = false;
-      character *playerCharacter = createPlayer();
+      SDL_Point *worldPos = new SDL_Point();
+      worldPos->x = 0;
+      worldPos->y = 0;
+      character *player = new character(gCharacterImage, worldPos, currentMap, gMovementSpeed);
+
+      SDL_Point *cameraWorldPos = new SDL_Point();
+      cameraWorldPos->x = 0;
+      cameraWorldPos->y = 0;
+
+      int dstToWest = 0;
+      int dstToEast = 0;
+      int dstToNorth = 0;
+      int dstToSouth = 0;
+
+      int cameraMovementBoundary;
+
+      if(gScreenWidth < gScreenHeight)
+      {
+        cameraMovementBoundary = 0;//gScreenWidth / 2;
+      }
+      else
+      {
+        cameraMovementBoundary = 0;//gScreenHeight / 2;
+      }
 
       while (!quit) {
         if (gKeyboardState[SDL_SCANCODE_ESCAPE]) {
@@ -68,67 +91,55 @@ int main(int argc, char *argv[]) {
           quit = true;
         }
         if (gKeyboardState[SDL_SCANCODE_W]) {
-          playerCharacter->locationY -= gMovementSpeed;
+          player->move(0, -gMovementSpeed);
         }
         if (gKeyboardState[SDL_SCANCODE_S]) {
-          playerCharacter->locationY += gMovementSpeed;
+          player->move(0, gMovementSpeed);
         }
         if (gKeyboardState[SDL_SCANCODE_A]) {
-          playerCharacter->locationX -= gMovementSpeed;
+          player->move(-gMovementSpeed, 0);
         }
         if (gKeyboardState[SDL_SCANCODE_D]) {
-          playerCharacter->locationX += gMovementSpeed;
+          player->move(gMovementSpeed, 0);
         }
-        playerCharacter->rect->x = playerCharacter->locationX;
-        playerCharacter->rect->y = playerCharacter->locationY;
 
-        int distanceFromLeftEdge = playerCharacter->centerPos().x;
-        int distanceFromRightEdge = gScreenWidth - playerCharacter->centerPos().x;
-        int distanceFromTopEdge = playerCharacter->centerPos().y;
-        int distanceFromBottomEdge = gScreenHeight - playerCharacter->centerPos().y;
+        dstToWest = player->worldPos->x;
+        dstToEast = currentMap->pixelCountX() - player->worldPos->x;
+        dstToNorth = player->worldPos->y;
+        dstToSouth = currentMap->pixelCountY() - player->worldPos->y;
 
-        SDL_Point *cameraCenterPos = new SDL_Point();
-
-        int cameraStopMarginX;
-        int cameraStopMarginY;
-
-        if (gScreenWidth < gScreenHeight)
+        if (dstToWest < cameraMovementBoundary)
         {
-          cameraStopMarginX = gScreenWidth / 4;
-          cameraStopMarginY = gScreenWidth / 4;
+          cameraWorldPos->x = cameraMovementBoundary;
+        }
+        else if (dstToEast < cameraMovementBoundary)
+        {
+          cameraWorldPos->x = currentMap->pixelCountX() - cameraMovementBoundary;
         }
         else
         {
-          cameraStopMarginX = gScreenHeight / 4;
-          cameraStopMarginY = gScreenHeight / 4;
+          cameraWorldPos->x = player->worldPos->x;
         }
 
-        if (distanceFromLeftEdge < cameraStopMarginX)
+        if (dstToNorth < cameraMovementBoundary)
         {
-          cameraCenterPos->x = cameraStopMarginX;
-        } else if (distanceFromRightEdge < cameraStopMarginX)
-        {
-          cameraCenterPos->x = gScreenWidth - cameraStopMarginX;
-        } else {
-          cameraCenterPos->x = playerCharacter->centerPos().x;
+          cameraWorldPos->y = cameraMovementBoundary;
         }
-        if (distanceFromTopEdge < cameraStopMarginY)
+        else if (dstToSouth < cameraMovementBoundary)
         {
-          cameraCenterPos->y = cameraStopMarginY;
-        } else if (distanceFromBottomEdge < cameraStopMarginY)
+          cameraWorldPos->y = currentMap->pixelCountY() - cameraMovementBoundary;
+        }
+        else
         {
-          cameraCenterPos->y = gScreenHeight - cameraStopMarginY;
-        } else {
-          cameraCenterPos->y = playerCharacter->centerPos().y;
+          cameraWorldPos->y = player->worldPos->y;
         }
 
-        // Calculate render port
-        SDL_Rect *tileRenderBoundary = new SDL_Rect();
-        vector tempViewportVector = playerCharacter->centerPos();
-        tileRenderBoundary->x = tempViewportVector.x - gScreenWidth - 0.5*playerCharacter->width;
-        tileRenderBoundary->y = tempViewportVector.y - gScreenHeight - 0.5*playerCharacter->height;
-        tileRenderBoundary->w = gScreenWidth + gScreenWidth + playerCharacter->width;
-        tileRenderBoundary->h = gScreenHeight + gScreenHeight + playerCharacter->height;
+        SDL_Rect *renderBoundary = new SDL_Rect();
+        renderBoundary->x = 0;
+        renderBoundary->y = 0;
+        renderBoundary->w = gScreenWidth;
+        renderBoundary->h = gScreenHeight;
+
         int countX = 0;
         int countY = 0;
         for (int tileIndex = 0; tileIndex < currentMap->tileCountTotal; tileIndex++)
@@ -138,26 +149,37 @@ int main(int argc, char *argv[]) {
             countX = 0;
             countY ++;
           }
-          SDL_Point *tilePos = new SDL_Point();
-          tilePos->x = currentMap->tileWidth * countX - 1;
-          tilePos->y = currentMap->tileHeight * countY;
-          if (SDL_PointInRect(tilePos, tileRenderBoundary))
+          SDL_Point *tileWorldPos = new SDL_Point();
+          tileWorldPos->x = currentMap->tileWidth * countX - 1;
+          tileWorldPos->y = currentMap->tileHeight * countY;
+
+          SDL_Point *tileScreenPos = new SDL_Point();
+          tileScreenPos->x = tileWorldPos->x - cameraWorldPos->x;
+          tileScreenPos->y = tileWorldPos->y - cameraWorldPos->y;
+
+          SDL_Rect *renderRectangle = new SDL_Rect();
+          renderRectangle->x = tileScreenPos->x;
+          renderRectangle->y = tileScreenPos->y;
+          renderRectangle->w = currentMap->tileWidth;
+          renderRectangle->h = currentMap->tileHeight;
+          if (SDL_HasIntersection(renderRectangle, renderBoundary))
           {
-            SDL_Rect *temp = new SDL_Rect();
-            temp->x = tilePos->x;
-            temp->y = tilePos->y;
-            temp->w = currentMap->tileWidth;
-            temp->h = currentMap->tileHeight;
-            SDL_RenderCopy(gRenderer, currentMap->tiles[tileIndex], NULL, temp);
+            SDL_RenderCopy(gRenderer, currentMap->tiles[tileIndex], NULL, renderRectangle);
           }
           countX++;
         }
-        SDL_RenderCopy(gRenderer, playerCharacter->texture, NULL, playerCharacter->rect);
+        SDL_Rect *characterRenderRect = new SDL_Rect();
+        SDL_Point *characterScreenPos = player->screenPos(new vector(cameraWorldPos->x, cameraWorldPos->y));
+        characterRenderRect->x = characterScreenPos->x;
+        characterRenderRect->y = characterScreenPos->y;
+        characterRenderRect->w = player->width;
+        characterRenderRect->h = player->height;
+        SDL_RenderCopy(gRenderer, player->texture, NULL, characterRenderRect);
         SDL_SetRenderDrawColor(gRenderer, 255, 0, 0, 255);
-        SDL_RenderDrawRect(gRenderer, tileRenderBoundary);
+        SDL_RenderDrawRect(gRenderer, renderBoundary);
         SDL_Rect *debugCameraPosIndicator = new SDL_Rect();
-        debugCameraPosIndicator->x = cameraCenterPos->x - 5;
-        debugCameraPosIndicator->y = cameraCenterPos->y - 5;
+        debugCameraPosIndicator->x = cameraWorldPos->x - 5;
+        debugCameraPosIndicator->y = cameraWorldPos->y - 5;
         debugCameraPosIndicator->w = 10;
         debugCameraPosIndicator->h = 10;
         SDL_RenderFillRect(gRenderer, debugCameraPosIndicator);
@@ -171,18 +193,4 @@ int main(int argc, char *argv[]) {
   close();
 
   return 0;
-}
-
-character *createPlayer() {
-  character *playerCharacter;
-  playerCharacter = new character(gCharacterImage, 0.0f, 0.0f, 128, 128, 0, 4);
-  playerCharacter->currentMap = 0;
-  playerCharacter->texture = gCharacterImage;
-  int width, height;
-  SDL_QueryTexture(playerCharacter->texture, NULL, NULL, &width, &height);
-  playerCharacter->height = width;
-  playerCharacter->width = height;
-  playerCharacter->rect->w = width;
-  playerCharacter->rect->h = height;
-  return playerCharacter;
 }

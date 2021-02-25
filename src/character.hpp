@@ -22,14 +22,14 @@ enum moveDirection {
 };
 
 class character : public Sprite{
-public: character(SDL_Texture *texture, int locationX, int locationY, int width, int height, int currentMap, int movementSpeed);
+public: character(SDL_Texture *texture, SDL_Point *worldPos, map *currentMap, int movementSpeed);
   int _movementSpeed;
   int _slowMovementSpeed;
-public: vector centerPos();
+public: SDL_Point *screenPos(vector *offset);
 public: moveDirection calculateMovement();
 public: void move(int deltaX, int deltaY);
-public: void setLocation (map Map, vector Location);
-public: void setCoords (vector Location);
+public: void setLocation (map *Map, SDL_Point *worldspace);
+public: void setCoords (SDL_Point *worldspace);
 };
 
 #endif//INC_2DGAME_CHARACTER_HPP

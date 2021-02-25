@@ -53,6 +53,11 @@ map::map(char *tilePath, char *dataPath, int tileWidth, int tileHeight, int tile
       memset((void*)texturePath, '\0', 4096);
     }
 
+    if (tileCountTotal == 0 && tiles[0] != NULL)
+    {
+      tileCountTotal = 32;
+    }
+
     free(texturePath);
   }
   else

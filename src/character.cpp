@@ -3,42 +3,35 @@
 //
 
 #include "character.hpp"
-void character::setLocation(map Map, vector Location) {
-  this->currentMap = Map.id;
-  this->locationX = Location.x;
-  this->locationY = Location.y;
-}
 moveDirection character::calculateMovement() { // NOLINT(readability-convert-member-functions-to-static)
   return MOVE_NONE;
 }
-void character::setCoords(vector Location) {
-  this->locationX = Location.x;
-  this->locationY = Location.y;
-}
 void character::move(int deltaX, int deltaY) {
-  this->locationX += deltaX;
-  this->locationY += deltaY;
+  this->worldPos->x += deltaX;
+  this->worldPos->y += deltaY;
 }
-character::character(SDL_Texture *texture, int locationX, int locationY, int width, int height, int currentMap, int movementSpeed) : Sprite(texture, locationX, locationY, width, height, currentMap) {
+character::character(SDL_Texture *texture, SDL_Point *worldPos, map *currentMap, int movementSpeed) : Sprite(texture,worldPos,currentMap) {
   this->texture = texture;
-  this->locationX = locationX;
-  this->locationY = locationY;
-  this->width = width;
-  this->height = height;
+  int tempWidth;
+  int tempHeight;
+  SDL_QueryTexture(texture, NULL, NULL, &tempWidth, &tempHeight);
+  this->width = tempWidth;
+  this->height = tempHeight;
+  this->worldPos = worldPos;
   this->currentMap = currentMap;
-  SDL_Rect *temp = new SDL_Rect();
-  temp->x = this->locationX;
-  temp->y = this->locationY;
-  temp->h = this->height;
-  temp->w = this->width;
-  this->rect = temp;
-  this->_movementSpeed = movementSpeed;
-  this->_slowMovementSpeed = movementSpeed/2;
+  _movementSpeed = movementSpeed;
+  _slowMovementSpeed = movementSpeed / 2;
 }
-vector character::centerPos() {
-  int tempX = width / 2;
-  int tempY = height / 2;
-  tempX += locationX;
-  tempY += locationY;
-  return vector(tempX, tempY);
+SDL_Point *character::screenPos(vector *offset) {
+  SDL_Point *output = new SDL_Point();
+  output->x = this->worldPos->x + offset->x;
+  output->y = this->worldPos->y + offset->y;
+  return output;
+}
+void character::setCoords(SDL_Point *worldspace) {
+  this->worldPos = worldspace;
+}
+void character::setLocation(map *Map, SDL_Point *worldspace) {
+  this->currentMap = Map;
+  this->worldPos = worldspace;
 }
