@@ -22,6 +22,7 @@ SDL_Renderer *gRenderer;
 Uint8 *gKeyboardState;
 int gMovementSpeed;
 SDL_Texture *gCharacterImage;
+bool gDebug;
 
 volatile map *currentMap;
 
@@ -45,7 +46,8 @@ int main(int argc, char *argv[]) {
   gScreenWidth = 1920;
   gScreenHeight = 1080;
   gcWindowTitle = (char*) "Simple 2D Game";
-  gMovementSpeed = 2;
+  gMovementSpeed = 5;
+  gDebug = false;
   if (!init()) {
     printf("Failed to initialize!\n");
     return -1;
@@ -79,6 +81,47 @@ int main(int argc, char *argv[]) {
         }
         playerCharacter->rect->x = playerCharacter->locationX;
         playerCharacter->rect->y = playerCharacter->locationY;
+
+        int distanceFromLeftEdge = playerCharacter->centerPos().x;
+        int distanceFromRightEdge = gScreenWidth - playerCharacter->centerPos().x;
+        int distanceFromTopEdge = playerCharacter->centerPos().y;
+        int distanceFromBottomEdge = gScreenHeight - playerCharacter->centerPos().y;
+
+        SDL_Point *cameraCenterPos = new SDL_Point();
+
+        int cameraStopMarginX;
+        int cameraStopMarginY;
+
+        if (gScreenWidth < gScreenHeight)
+        {
+          cameraStopMarginX = gScreenWidth / 4;
+          cameraStopMarginY = gScreenWidth / 4;
+        }
+        else
+        {
+          cameraStopMarginX = gScreenHeight / 4;
+          cameraStopMarginY = gScreenHeight / 4;
+        }
+
+        if (distanceFromLeftEdge < cameraStopMarginX)
+        {
+          cameraCenterPos->x = cameraStopMarginX;
+        } else if (distanceFromRightEdge < cameraStopMarginX)
+        {
+          cameraCenterPos->x = gScreenWidth - cameraStopMarginX;
+        } else {
+          cameraCenterPos->x = playerCharacter->centerPos().x;
+        }
+        if (distanceFromTopEdge < cameraStopMarginY)
+        {
+          cameraCenterPos->y = cameraStopMarginY;
+        } else if (distanceFromBottomEdge < cameraStopMarginY)
+        {
+          cameraCenterPos->y = gScreenHeight - cameraStopMarginY;
+        } else {
+          cameraCenterPos->y = playerCharacter->centerPos().y;
+        }
+
         // Calculate render port
         SDL_Rect *tileRenderBoundary = new SDL_Rect();
         vector tempViewportVector = playerCharacter->centerPos();
@@ -112,6 +155,12 @@ int main(int argc, char *argv[]) {
         SDL_RenderCopy(gRenderer, playerCharacter->texture, NULL, playerCharacter->rect);
         SDL_SetRenderDrawColor(gRenderer, 255, 0, 0, 255);
         SDL_RenderDrawRect(gRenderer, tileRenderBoundary);
+        SDL_Rect *debugCameraPosIndicator = new SDL_Rect();
+        debugCameraPosIndicator->x = cameraCenterPos->x - 5;
+        debugCameraPosIndicator->y = cameraCenterPos->y - 5;
+        debugCameraPosIndicator->w = 10;
+        debugCameraPosIndicator->h = 10;
+        SDL_RenderFillRect(gRenderer, debugCameraPosIndicator);
         SDL_RenderPresent(gRenderer);
         SDL_PumpEvents();
         SDL_SetRenderDrawColor(gRenderer, 0, 0, 0, 255);

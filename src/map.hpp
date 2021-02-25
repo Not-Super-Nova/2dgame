@@ -22,6 +22,14 @@ public: map(char* tilePath, char*dataPath, int tileWidth, int tileHeight, int ti
   int tileCountX;
   int tileCountY;
   int tileCountTotal;
+  int pixelCountX()
+  {
+    return tileWidth*tileCountX;
+  }
+  int pixelCountY()
+  {
+    return tileHeight*tileCountY;
+  }
   SDL_Texture *tiles[32];
   SDL_Rect* collisionBoxes[64];
 

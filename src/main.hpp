@@ -16,4 +16,5 @@ extern SDL_Renderer *gRenderer;
 extern Uint8 *gKeyboardState;
 extern int gMovementSpeed;
 extern SDL_Texture *gCharacterImage;
+extern bool gDebug;
 const int gcTileCount = 32;
