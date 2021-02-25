@@ -15,51 +15,55 @@ bool map::valid() {
 }
 map::map(char *tilePath, char *dataPath, int tileWidth, int tileHeight, int tileCountX, int tileCountY) {
   bool error = false;
+  this->tileCountX = tileCountX;
+  this->tileCountY = tileCountY;
+  if(!valid())
+    throw mapLoadingException();
   int tilePathType = statFile(tilePath);
   int collisionDataPathType = statFile(dataPath);
   if (tilePathType == 1 && collisionDataPathType == 1)
   {
-    printf("Directories %s and %s are valid", tilePath, dataPath);
-    char*texturePath;
-    sprintf(texturePath, "%s/%i.png", tilePath, 0);
-    printf("%s", texturePath);
+    tileCountTotal = 0;
+    printf("Directories %s and %s are valid\n", tilePath, dataPath);
+    char* texturePath = static_cast<char *>(malloc(4096));
+    memset((void*)texturePath, '\0', 4096);
+    snprintf(texturePath, 4096, "%s/%i.png", tilePath, 0);
+    printf("%s\n", texturePath);
     tiles[0] = loadTexture(texturePath);
     SDL_QueryTexture(tiles[0], NULL, NULL, &this->tileWidth, &this->tileHeight);
     for (int i = 1; i < 32; i++)
     {
-      texturePath = NULL;
-      sprintf(texturePath, "%s/%i.png", tilePath, i);
-      printf("%s", texturePath);
+      snprintf(texturePath, 4096, "%s/%i.png", tilePath, i);
+      printf("%s\n", texturePath);
       tiles[i] = loadTexture(texturePath);
       if (tiles[i] == NULL)
       {
-        tileCountTotal = i + 1;
-        i = 32;
+        if (tileCountTotal == 0)
+          tileCountTotal = i;
+        else
+          break;
       }
       int temph;
       int tempw;
       SDL_QueryTexture(tiles[i], NULL, NULL, &tempw, &temph);
       if (tempw != this->tileWidth || temph != this->tileHeight) {
+        free(texturePath);
         throw mapLoadingException();
       }
-
+      memset((void*)texturePath, '\0', 4096);
     }
-    //char* infoPath;
-    //sprintf(infoPath, "%s/%s.data", dataPath, "map");
-    // Unsure of following
-    //FILE *mapDataFileHandle = fopen(infoPath, "r");
-    //char* buf[1024];
-    //fread(&mapDataFileHandle, 1024, 0, mapDataFileHandle);
+
+    free(texturePath);
   }
   else
   {
     if (tilePathType != 1)
     {
-      printf("Path %s is invalid", tilePath);
+      printf("Path %s is invalid\n", tilePath);
     }
     if (collisionDataPathType != 1)
     {
-      printf("Path %s is invalid", dataPath);
+      printf("Path %s is invalid\n", dataPath);
     }
     throw mapLoadingException();
   }
