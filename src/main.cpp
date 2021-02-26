@@ -89,11 +89,15 @@ int main(int argc, char *argv[]) {
 
         if (player->worldPos->x < (gScreenWidth * 0.5) - (player->width * 0.5))
           cameraWorldPos->x = 0;
+        else if (player->worldPos->x > currentMap->pixelCountX() - (0.5 * gScreenWidth) - (0.5 * player->width))
+          cameraWorldPos->x = currentMap->pixelCountX() - gScreenWidth;
         else
           cameraWorldPos->x = player->worldPos->x - (gScreenWidth * 0.5) + (player->width * 0.5);
 
         if (player->worldPos->y < (gScreenHeight * 0.5) - (player->height * 0.5))
           cameraWorldPos->y = 0;
+        else if (player->worldPos->y > currentMap->pixelCountY() - (0.5 * gScreenHeight) - (0.5 * player->height))
+          cameraWorldPos->y = currentMap->pixelCountY() - gScreenHeight;
         else
           cameraWorldPos->y = player->worldPos->y - (gScreenHeight * 0.5) + (player->height * 0.5);
 
@@ -138,17 +142,8 @@ int main(int argc, char *argv[]) {
         characterRenderRect->w = player->width;
         characterRenderRect->h = player->height;
         SDL_RenderCopy(gRenderer, player->texture, NULL, characterRenderRect);
-        SDL_SetRenderDrawColor(gRenderer, 255, 0, 0, 255);
-        SDL_RenderDrawRect(gRenderer, renderBoundary);
-        SDL_Rect *debugCameraPosIndicator = new SDL_Rect();
-        debugCameraPosIndicator->x = cameraWorldPos->x - 5;
-        debugCameraPosIndicator->y = cameraWorldPos->y - 5;
-        debugCameraPosIndicator->w = 10;
-        debugCameraPosIndicator->h = 10;
-        SDL_RenderFillRect(gRenderer, debugCameraPosIndicator);
         SDL_RenderPresent(gRenderer);
         SDL_PumpEvents();
-        SDL_SetRenderDrawColor(gRenderer, 0, 0, 0, 255);
         SDL_RenderClear(gRenderer);
       }
     }
