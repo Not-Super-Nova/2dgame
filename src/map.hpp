@@ -39,7 +39,7 @@ public: map(char* tilePath, char*dataPath, int tileWidth, int tileHeight, int ti
 struct mapLoadingException: public std::exception {
   const char * what () const noexcept override
   {
-    return "Error loading map"; //TODO: flesh out exception generation
+    return "Error loading map."; //TODO: flesh out exception generation
   }
 };
 

@@ -1,5 +1,14 @@
 #include <SDL2/SDL.h>
 
+enum NextScene
+{
+  SCENE_MAIN_MENU,
+  SCENE_IN_GAME,
+  SCENE_CUTSCENE,
+  SCENE_SETTINGS,
+  SCENE_ABOUT
+};
+
 extern int gScreenWidth;
 extern int gScreenHeight;
 extern char *gcWindowTitle;
@@ -10,4 +19,23 @@ extern Uint8 *gKeyboardState;
 extern int gMovementSpeed;
 extern SDL_Texture *gCharacterImage;
 extern bool gDebug;
+extern NextScene gNextScene;
+extern bool gQuit;
 const int gcTileCount = 32;
+
+extern bool inGameKeyboardHandler(character *player);
+extern void runSceneInGame();
+
+struct initException: public std::exception {
+  const char * what () const noexcept override
+  {
+    return "Failed to initialise game engine, quitting."; //TODO: flesh out exception generation
+  }
+};
+
+struct mediaException: public std::exception {
+  const char * what () const noexcept override
+  {
+    return "Failed to load required game media, quitting."; //TODO: flesh out exception generation
+  }
+};

@@ -24,6 +24,8 @@ Uint8 *gKeyboardState;
 int gMovementSpeed = 5;
 SDL_Texture *gCharacterImage;
 bool gDebug = true;
+bool gQuit = false;
+NextScene gNextScene = SCENE_MAIN_MENU;
 
 map *currentMap;
 
@@ -31,28 +33,36 @@ character *createPlayer();
 
 void windowUpdate(SDL_Event event);
 
-// Destroy objects ready for closing
-// TODO: map textures
-void close() {
-  SDL_DestroyTexture(gCharacterImage);
-  gCharacterImage = NULL;
-
-  SDL_DestroyRenderer(gRenderer);
-  gRenderer = NULL;
-
-  SDL_DestroyWindow(gWindow);
-  gWindow = NULL;
-
-  SDL_Quit();
-}
-
-bool keyboardHandler(character *player);
 int main() {
   if (!init())
-    throw "Failed to initialise game engine";
+    throw initException();
   if (!loadMedia())
-    throw "Failed to load critical game media";
+    throw mediaException();
 
+  while (!gQuit)
+  {
+    switch (gNextScene) {
+      case SCENE_MAIN_MENU:
+        // TODO: runSceneMainMenu();
+        break;
+      case SCENE_IN_GAME:
+        runSceneInGame();
+        break;
+      case SCENE_ABOUT:
+        // TODO: runSceneAbout();
+        break;
+      case SCENE_SETTINGS:
+        // TODO: runSceneSettings();
+        break;
+      case SCENE_CUTSCENE:
+        // TODO: runSceneCutscene();
+    }
+  }
+  unload();
+
+  return 0;
+}
+void runSceneInGame() {
   // Load test map
   // TODO: remove this, and replace with loading maps from saves / source
   currentMap = new map((char *) "/home/nova/2dgame/media/testMap", (char *) "/home/nova/2dgame/media/testMap", 512, 512, 4, 8);
@@ -68,10 +78,10 @@ int main() {
   cameraWorldPos->x = 0;
   cameraWorldPos->y = 0;
 
-  bool quit = false;
-  while (!quit) {
+  bool stop = false;
+  while (!stop) {
 
-    quit = keyboardHandler(player);
+    stop = inGameKeyboardHandler(player);
 
     // Create new SDL_Event object, named event
     SDL_Event event;
@@ -153,12 +163,9 @@ int main() {
     SDL_PumpEvents();
     SDL_RenderClear(gRenderer);
   }
-  close();
-
-  return 0;
 }
 
-bool keyboardHandler(character *player) {
+bool inGameKeyboardHandler(character *player) {
   bool quit;
   if (gKeyboardState[SDL_SCANCODE_ESCAPE]) {
     printf("Quit requested, shutting down");

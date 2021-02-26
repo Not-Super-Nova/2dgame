@@ -71,3 +71,18 @@ bool loadMedia() {
 
   return success;
 }
+
+// Destroy objects ready for closing
+// TODO: map textures
+void unload() {
+  SDL_DestroyTexture(gCharacterImage);
+  gCharacterImage = NULL;
+
+  SDL_DestroyRenderer(gRenderer);
+  gRenderer = NULL;
+
+  SDL_DestroyWindow(gWindow);
+  gWindow = NULL;
+
+  SDL_Quit();
+}
