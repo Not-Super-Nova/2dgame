@@ -1,9 +1,3 @@
-//
-// Created by nova on 19/02/2021.
-//
-
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
 #include <SDL2/SDL_pixels.h>
 #include <SDL2/SDL_render.h>
 #include "sprite.hpp"

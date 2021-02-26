@@ -1,7 +1,3 @@
-//
-// Created by nova on 19/02/2021.
-//
-
 #ifndef INC_2DGAME_SPRITE_HPP
 #define INC_2DGAME_SPRITE_HPP
 

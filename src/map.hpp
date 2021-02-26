@@ -33,12 +33,11 @@ public: map(char* tilePath, char*dataPath, int tileWidth, int tileHeight, int ti
   SDL_Texture *tiles[32];
   SDL_Rect* collisionBoxes[64];
 
-public: SDL_Texture *render (SDL_Rect viewport);
   static int statFile(const char *tilePath);
 };
 
 struct mapLoadingException: public std::exception {
-  const char * what () const throw() override
+  const char * what () const noexcept override
   {
     return "Error loading map"; //TODO: flesh out exception generation
   }
