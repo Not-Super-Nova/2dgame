@@ -28,6 +28,7 @@ map *currentMap;
 
 character *createPlayer();
 
+void windowUpdate(SDL_Event event);
 void close() {
 
   SDL_DestroyTexture(gCharacterImage);
@@ -85,6 +86,18 @@ int main(int argc, char *argv[]) {
         }
         if (gKeyboardState[SDL_SCANCODE_D]) {
           player->move(gMovementSpeed, 0);
+        }
+
+        // Create new SDL_Event object, named event
+        SDL_Event event;
+        // Loop through all events available from the SDL2 library
+        // the "&event" section means that it sets the event variable to the next available event to process
+        while (SDL_PollEvent(&event))
+        {
+          // If the event is a window event,
+          if (event.type == SDL_WINDOWEVENT)
+            // Send to function specific to window events
+            windowUpdate(event);
         }
 
         if (player->worldPos->x < (gScreenWidth * 0.5) - (player->width * 0.5))
@@ -151,4 +164,25 @@ int main(int argc, char *argv[]) {
   close();
 
   return 0;
+}
+
+// "void" denotes function that doesn't return a value
+void windowUpdate(SDL_Event event) {
+  switch (event.window.event)
+  {
+      // In the case that the window size has changed,
+    case SDL_WINDOWEVENT_RESIZED:
+    case SDL_WINDOWEVENT_SIZE_CHANGED:
+      // Set screen width and height according to data
+      gScreenWidth = event.window.data1;
+      gScreenHeight = event.window.data2;
+      // And break so that other cases don't run
+      break;
+    // In the case that the window lost focus, or was hidden
+    case SDL_WINDOWEVENT_HIDDEN:
+    case SDL_WINDOWEVENT_FOCUS_LOST:
+      // Add function that will likely be made with the UI
+      // TODO: pauseGame();
+      break;
+  }
 }
