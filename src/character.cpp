@@ -3,7 +3,7 @@
 //
 
 #include "character.hpp"
-moveDirection character::calculateMovement() { // NOLINT(readability-convert-member-functions-to-static)
+moveDirection character::calculateMovement() {// NOLINT(readability-convert-member-functions-to-static)
   return MOVE_NONE;
 }
 
@@ -12,7 +12,7 @@ void character::move(int deltaX, int deltaY) {
   this->worldPos->y += deltaY;
 }
 
-character::character(SDL_Texture *texture, SDL_Point *worldPos, map *currentMap, int movementSpeed) : Sprite(texture,worldPos,currentMap) {
+character::character(SDL_Texture *texture, SDL_Point *worldPos, map *currentMap, int movementSpeed) : Sprite(texture, worldPos, currentMap) {
   this->texture = texture;
   int tempWidth;
   int tempHeight;

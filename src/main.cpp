@@ -8,15 +8,15 @@
 
 #include "character.hpp"
 #include "loaders.hpp"
-#include "sprite.hpp"
 #include "map.hpp"
+#include "sprite.hpp"
 
 #include "main.hpp"
 
 // TODO: make this set from actual screen. Not everyone has a FHD screen any more.
 int gScreenWidth = 1920;
 int gScreenHeight = 1080;
-char *gcWindowTitle = (char*) "Simple 2D Game";
+char *gcWindowTitle = (char *) "Simple 2D Game";
 
 SDL_Window *gWindow;
 SDL_Renderer *gRenderer;
@@ -39,8 +39,7 @@ int main() {
   if (!loadMedia())
     throw mediaException();
 
-  while (!gQuit)
-  {
+  while (!gQuit) {
     switch (gNextScene) {
       case SCENE_MAIN_MENU:
         // TODO: runSceneMainMenu();
@@ -188,8 +187,7 @@ bool inGameKeyboardHandler(character *player) {
 
 // "void" denotes function that doesn't return a value
 void windowUpdate(SDL_Event event) {
-  switch (event.window.event)
-  {
+  switch (event.window.event) {
       // In the case that the window size has changed,
     case SDL_WINDOWEVENT_RESIZED:
     case SDL_WINDOWEVENT_SIZE_CHANGED:

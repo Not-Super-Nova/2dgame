@@ -1,7 +1,6 @@
 #include <SDL2/SDL.h>
 
-enum NextScene
-{
+enum NextScene {
   SCENE_MAIN_MENU,
   SCENE_IN_GAME,
   SCENE_CUTSCENE,
@@ -26,16 +25,14 @@ const int gcTileCount = 32;
 extern bool inGameKeyboardHandler(character *player);
 extern void runSceneInGame();
 
-struct initException: public std::exception {
-  const char * what () const noexcept override
-  {
-    return "Failed to initialise game engine, quitting."; //TODO: flesh out exception generation
+struct initException : public std::exception {
+  const char *what() const noexcept override {
+    return "Failed to initialise game engine, quitting.";//TODO: flesh out exception generation
   }
 };
 
-struct mediaException: public std::exception {
-  const char * what () const noexcept override
-  {
-    return "Failed to load required game media, quitting."; //TODO: flesh out exception generation
+struct mediaException : public std::exception {
+  const char *what() const noexcept override {
+    return "Failed to load required game media, quitting.";//TODO: flesh out exception generation
   }
 };
