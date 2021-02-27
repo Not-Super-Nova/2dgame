@@ -19,13 +19,13 @@ public:
   SDL_Point *screenPos(vector *offset);
 
 public:
-  void move(int deltaX, int deltaY);
+  void Move(int deltaX, int deltaY) override;
 
 public:
-  void setLocation(map *Map, SDL_Point *worldspace);
+  void setLocation(map *Map, SDL_Point *worldSpace);
 
 public:
-  void setCoords(SDL_Point *worldspace);
+  void setCoords(SDL_Point *worldSpace);
 };
 
 #endif//INC_2DGAME_CHARACTER_HPP

@@ -1,15 +1,8 @@
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_events.h>
-#include <SDL2/SDL_keycode.h>
-#include <SDL2/SDL_render.h>
 #include <SDL2/SDL_ttf.h>
-#include <SDL2/SDL_video.h>
-#include <cstdio>
-#include <cstring>
 
 #include "entities/character.hpp"
 #include "game/loaders.hpp"
-#include "game/map.hpp"
 
 #include "graphics/UI.hpp"
 
@@ -123,8 +116,6 @@ void runSceneInGame() {
   // TODO: remove this, and replace with loading maps from saves / source
   currentMap = new map((char *) "/home/nova/2dgame/media/testMap",
                        (char *) "/home/nova/2dgame/media/testMap",
-                       512,
-                       512,
                        4,
                        8);
 
@@ -166,7 +157,7 @@ void runSceneInGame() {
     else if (player->worldPos->x > currentMap->pixelCountX() - (0.5 * gScreenWidth) - (0.5 * player->width))
       cameraWorldPos->x = currentMap->pixelCountX() - gScreenWidth;
     else
-      cameraWorldPos->x = player->worldPos->x - (gScreenWidth * 0.5) + (player->width * 0.5);
+      cameraWorldPos->x = (int)(player->worldPos->x - (gScreenWidth * 0.5) + (player->width * 0.5));
 
     // Calculate camera position on the Y axis, according to screen size and world size
     if (player->worldPos->y < (gScreenHeight * 0.5) - (player->height * 0.5))
@@ -238,16 +229,16 @@ bool inGameKeyboardHandler(character *player) {
     quit = true;
   }
   if (gKeyboardState[SDL_SCANCODE_W]) {
-    player->move(0, -gMovementSpeed);
+    player->Move(0, -gMovementSpeed);
   }
   if (gKeyboardState[SDL_SCANCODE_S]) {
-    player->move(0, gMovementSpeed);
+    player->Move(0, gMovementSpeed);
   }
   if (gKeyboardState[SDL_SCANCODE_A]) {
-    player->move(-gMovementSpeed, 0);
+    player->Move(-gMovementSpeed, 0);
   }
   if (gKeyboardState[SDL_SCANCODE_D]) {
-    player->move(gMovementSpeed, 0);
+    player->Move(gMovementSpeed, 0);
   }
   return quit;
 }
@@ -271,5 +262,7 @@ void windowUpdate(SDL_Event event) {
       break;
     case SDL_WINDOWEVENT_CLOSE:
       exit(0);
+    default:
+      break;
   }
 }

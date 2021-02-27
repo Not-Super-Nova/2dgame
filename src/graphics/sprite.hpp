@@ -15,7 +15,7 @@ public:
   SDL_Point *worldPos;
 
 public:
-  void Move(int deltaX, int deltaY);
+  virtual void Move(int deltaX, int deltaY) = 0;
 
 public:
   int width;

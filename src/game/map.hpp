@@ -13,10 +13,10 @@
 
 class map {
 public:
-  bool valid();
+  bool valid() const;
 
 public:
-  map(char *tilePath, char *dataPath, int tileWidth, int tileHeight, int tileCountX, int tileCountY);
+  map(char *tilePath, char *dataPath, int tileCountX, int tileCountY);
   int id;
   char *tilePath;
   char *collisionDataPath;
@@ -25,10 +25,10 @@ public:
   int tileCountX;
   int tileCountY;
   int tileCountTotal;
-  int pixelCountX() {
+  int pixelCountX() const {
     return tileWidth * tileCountX;
   }
-  int pixelCountY() {
+  int pixelCountY() const {
     return tileHeight * tileCountY;
   }
   SDL_Texture *tiles[32];

@@ -4,7 +4,7 @@
 
 #include "character.hpp"
 
-void character::move(int deltaX, int deltaY) {
+void character::Move(int deltaX, int deltaY) {
   this->worldPos->x += deltaX;
   this->worldPos->y += deltaY;
 }
@@ -29,11 +29,11 @@ SDL_Point *character::screenPos(vector *offset) {
   return output;
 }
 
-void character::setCoords(SDL_Point *worldspace) {
-  this->worldPos = worldspace;
+void character::setCoords(SDL_Point *worldSpace) {
+  this->worldPos = worldSpace;
 }
 
-void character::setLocation(map *Map, SDL_Point *worldspace) {
+void character::setLocation(map *Map, SDL_Point *worldSpace) {
   this->currentMap = Map;
-  this->worldPos = worldspace;
+  this->worldPos = worldSpace;
 }

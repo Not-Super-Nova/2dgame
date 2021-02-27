@@ -7,14 +7,14 @@
 #include <sys/stat.h>
 
 // Calculate if map dimensions make sense, given array sizes
-bool map::valid() {
+bool map::valid() const {
   if (tileCountX * tileCountY > 32) {
     return false;
   }
   return true;
 }
 
-map::map(char *tilePath, char *dataPath, int tileWidth, int tileHeight, int tileCountX, int tileCountY) {
+map::map(char *tilePath, char *dataPath, int tileCountX, int tileCountY) {
 
   this->tileCountX = tileCountX;
   this->tileCountY = tileCountY;
@@ -56,10 +56,10 @@ map::map(char *tilePath, char *dataPath, int tileWidth, int tileHeight, int tile
       }
 
       // Check dimensions match other tiles
-      int temph;
-      int tempw;
-      SDL_QueryTexture(tiles[i], NULL, NULL, &tempw, &temph);
-      if (tempw != this->tileWidth || temph != this->tileHeight) {
+      int tempHeight;
+      int tempWidth;
+      SDL_QueryTexture(tiles[i], NULL, NULL, &tempWidth, &tempHeight);
+      if (tempWidth != this->tileWidth || tempHeight != this->tileHeight) {
         free(texturePath);
         throw mapLoadingException();
       }

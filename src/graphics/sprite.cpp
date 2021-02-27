@@ -1,6 +1,4 @@
 #include "../graphics/sprite.hpp"
-#include <SDL2/SDL_pixels.h>
-#include <SDL2/SDL_render.h>
 
 Sprite::Sprite(SDL_Texture *texture, SDL_Point *worldPos, map *currentMap) {
   this->texture = texture;
