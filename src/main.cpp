@@ -30,7 +30,6 @@ bool gQuit = false;
 NextScene gNextScene = SCENE_MAIN_MENU;
 
 map *currentMap;
-character *createPlayer();
 
 void runSceneMainMenu();
 int main() {
@@ -71,7 +70,6 @@ int main() {
 }
 
 void runSceneMainMenu() {
-  UI *sceneUI = new UI();
   TTF_Font *titleFont = TTF_OpenFont((char *) "/home/nova/2dgame/media/OpenSans-Light.ttf", 30);
   if (titleFont == NULL) {
     printf("%s\n", TTF_GetError());
