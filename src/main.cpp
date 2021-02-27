@@ -78,7 +78,7 @@ void runSceneMainMenu() {
     throw mediaException();
   }
   SDL_Point *menuTextBoxOrigin = new SDL_Point();
-  menuTextBoxOrigin->x = gScreenWidth / 4;
+  menuTextBoxOrigin->x = 0;
   menuTextBoxOrigin->y = gScreenHeight / 4;
   SDL_Color *backgroundColor = new SDL_Color();
   backgroundColor->r = 0;
@@ -90,7 +90,8 @@ void runSceneMainMenu() {
   white->g = 255;
   white->b = 255;
   white->a = 255;
-  UI::TextBox *titleTextBox = new UI::TextBox(menuTextBoxOrigin, gScreenHeight / 2, gScreenWidth / 2, backgroundColor, white, NULL, NULL, NULL, gcWindowTitle, titleFont);
+  UI::TextBox *titleTextBox = new UI::TextBox(menuTextBoxOrigin, backgroundColor, white, NULL, NULL, NULL, gcWindowTitle, titleFont);
+  titleTextBox->origin->x = (gScreenWidth / 2) - (titleTextBox->width / 2);
   titleTextBox->updateTexture();
   bool continueMenu = true;
   while (continueMenu) {

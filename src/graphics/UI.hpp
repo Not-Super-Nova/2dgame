@@ -47,7 +47,7 @@ class UI {
 public:
   class TextBox : public RenderedItem {
   public:
-    TextBox(SDL_Point *origin, int width, int height, SDL_Color *backgroundColor, SDL_Color *foregroundColor, SDL_Color *borderColor, int borderWidth, float *opacity, char *text, TTF_Font *font);
+    TextBox(SDL_Point *origin, SDL_Color *backgroundColor, SDL_Color *foregroundColor, SDL_Color *borderColor, int borderWidth, float *opacity, char *text, TTF_Font *font);
     char *text = (char *) "Sample Text";
     TTF_Font *font;
     void updateTexture() override;
