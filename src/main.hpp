@@ -1,4 +1,5 @@
 #include <SDL2/SDL.h>
+#include "character.hpp"
 
 enum NextScene {
   SCENE_MAIN_MENU,
@@ -22,8 +23,8 @@ extern NextScene gNextScene;
 extern bool gQuit;
 const int gcTileCount = 32;
 
-extern bool inGameKeyboardHandler(character *player);
-extern void runSceneInGame();
+bool inGameKeyboardHandler(character *player);
+void runSceneInGame();
 
 struct initException : public std::exception {
   const char *what() const noexcept override {

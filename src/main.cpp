@@ -55,6 +55,7 @@ int main() {
         break;
       case SCENE_CUTSCENE:
         // TODO: runSceneCutscene();
+        break;
     }
   }
   unload();
@@ -64,7 +65,12 @@ int main() {
 void runSceneInGame() {
   // Load test map
   // TODO: remove this, and replace with loading maps from saves / source
-  currentMap = new map((char *) "/home/nova/2dgame/media/testMap", (char *) "/home/nova/2dgame/media/testMap", 512, 512, 4, 8);
+  currentMap = new map((char *) "/home/nova/2dgame/media/testMap",
+                       (char *) "/home/nova/2dgame/media/testMap",
+                       512,
+                       512,
+                       4,
+                       8);
 
   // TODO: Load world position from save file
   SDL_Point *worldPos = new SDL_Point();

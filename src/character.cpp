@@ -3,9 +3,6 @@
 //
 
 #include "character.hpp"
-moveDirection character::calculateMovement() {// NOLINT(readability-convert-member-functions-to-static)
-  return MOVE_NONE;
-}
 
 void character::move(int deltaX, int deltaY) {
   this->worldPos->x += deltaX;
