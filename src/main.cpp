@@ -32,7 +32,7 @@ NextScene gNextScene = SCENE_MAIN_MENU;
 map *currentMap;
 character *createPlayer();
 
-[[noreturn]] void runSceneMainMenu();
+void runSceneMainMenu();
 int main() {
   if (!init())
     throw initException();
