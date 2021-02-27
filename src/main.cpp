@@ -6,10 +6,10 @@
 #include <cstdio>
 #include <cstring>
 
-#include "character.hpp"
-#include "loaders.hpp"
-#include "sprite.hpp"
-#include "map.hpp"
+#include "entities/character.hpp"
+#include "game/loaders.hpp"
+#include "game/map.hpp"
+#include "render/sprite.hpp"
 
 #include "main.hpp"
 
@@ -133,7 +133,7 @@ int main() {
       renderRectangle->h = currentMap->tileHeight;
 
       if (SDL_HasIntersection(renderRectangle, renderBoundary)) {
-        // Tile in range, render it
+        // Tile in range, graphics it
         SDL_RenderCopy(gRenderer, currentMap->tiles[tileIndex], NULL, renderRectangle);
       }
       countX++;
@@ -148,7 +148,7 @@ int main() {
     characterRenderRect->h = player->height;
     SDL_RenderCopy(gRenderer, player->texture, NULL, characterRenderRect);
 
-    // General SDL Library stuff for finishing render, and updating events
+    // General SDL Library stuff for finishing graphics, and updating events
     SDL_RenderPresent(gRenderer);
     SDL_PumpEvents();
     SDL_RenderClear(gRenderer);
