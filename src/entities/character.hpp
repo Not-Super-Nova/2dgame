@@ -6,8 +6,8 @@
 #define INC_2DGAME_CHARACTER_HPP
 
 #include "../game/map.hpp"
-#include "../render/sprite.hpp"
-#include "../render/vector.hpp"
+#include "../graphics/sprite.hpp"
+#include "../graphics/vector.hpp"
 
 class character : public Sprite{
 public: character(SDL_Texture *texture, SDL_Point *worldPos, map *currentMap, int movementSpeed);
