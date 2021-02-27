@@ -6,10 +6,10 @@
 #include <cstdio>
 #include <cstring>
 
-#include "character.hpp"
-#include "loaders.hpp"
-#include "sprite.hpp"
-#include "map.hpp"
+#include "entities/character.hpp"
+#include "game/loaders.hpp"
+#include "game/map.hpp"
+#include "graphics/sprite.hpp"
 
 #include "main.hpp"
 
