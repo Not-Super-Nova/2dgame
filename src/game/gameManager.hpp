@@ -6,7 +6,7 @@
 #define INC_2DGAME_GAMEMANAGER_HPP
 
 #include "../entities/character.hpp"
-#include "../render/sprite.hpp"
+#include "../graphics/sprite.hpp"
 #include "map.hpp"
 #include <ctime>
 
