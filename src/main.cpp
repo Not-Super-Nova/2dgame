@@ -10,6 +10,8 @@
 #include "game/loaders.hpp"
 #include "game/map.hpp"
 
+#include "graphics/UI.hpp"
+
 #include "main.hpp"
 
 // TODO: make this set from actual screen. Not everyone has a FHD screen any more.
@@ -24,11 +26,12 @@ int gMovementSpeed = 5;
 SDL_Texture *gCharacterImage;
 bool gDebug = true;
 bool gQuit = false;
-NextScene gNextScene = SCENE_IN_GAME;
+NextScene gNextScene = SCENE_MAIN_MENU;
 
 map *currentMap;
 character *createPlayer();
 
+[[noreturn]] void runSceneMainMenu();
 int main() {
   if (!init())
     throw initException();
@@ -38,8 +41,7 @@ int main() {
   while (!gQuit) {
     switch (gNextScene) {
       case SCENE_MAIN_MENU:
-        // TODO: runSceneMainMenu();
-        gQuit = true;
+        runSceneMainMenu();
         break;
       case SCENE_IN_GAME:
         runSceneInGame();
@@ -66,6 +68,56 @@ int main() {
 
   return 0;
 }
+
+void runSceneMainMenu() {
+  UI *sceneUI = new UI();
+  TTF_Font *titleFont = TTF_OpenFont((char *) "/home/nova/2dgame/media/OpenSans-Light.ttf", 30);
+  if (titleFont == NULL) {
+    printf("%s\n", TTF_GetError());
+    throw mediaException();
+  }
+  SDL_Point *menuTextBoxOrigin = new SDL_Point();
+  menuTextBoxOrigin->x = gScreenWidth / 4;
+  menuTextBoxOrigin->y = gScreenHeight / 4;
+  SDL_Color *backgroundColor = new SDL_Color();
+  backgroundColor->r = 0;
+  backgroundColor->g = 0;
+  backgroundColor->b = 0;
+  backgroundColor->a = 255;
+  SDL_Color *white = new SDL_Color();
+  white->r = 255;
+  white->g = 255;
+  white->b = 255;
+  white->a = 255;
+  UI::TextBox *titleTextBox = new UI::TextBox(menuTextBoxOrigin, gScreenHeight / 2, gScreenWidth / 2, backgroundColor, white, NULL, NULL, NULL, gcWindowTitle, titleFont);
+  titleTextBox->updateTexture();
+  bool continueMenu = true;
+  while (continueMenu) {
+    // Create new SDL_Event object, named event
+    SDL_Event event;
+    // Loop through all events available from the SDL2 library
+    // the "&event" section means that it sets the event variable to the next available event to process
+    while (SDL_PollEvent(&event)) {
+      // If the event is a window event,
+      if (event.type == SDL_WINDOWEVENT)
+        // Send to function specific to window events
+        windowUpdate(event);
+      if (event.type == SDL_MOUSEBUTTONDOWN) {
+        SDL_Point *mousePosition = new SDL_Point();
+        SDL_GetMouseState(&mousePosition->x, &mousePosition->y);
+        if (SDL_PointInRect(mousePosition, titleTextBox->renderRect())) {
+          gNextScene = SCENE_IN_GAME;
+          continueMenu = false;
+        }
+      }
+    }
+    SDL_RenderCopy(gRenderer, titleTextBox->texture, NULL, titleTextBox->renderRect());
+    SDL_RenderPresent(gRenderer);
+    SDL_PumpEvents();
+    SDL_RenderClear(gRenderer);
+  }
+}
+
 void runSceneInGame() {
   // Load test map
   // TODO: remove this, and replace with loading maps from saves / source

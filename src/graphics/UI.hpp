@@ -24,13 +24,13 @@ enum TextAlignment {
 class UI {
   class RenderedItem {
   public:
-    RenderedItem(SDL_Point *origin, int width, int height, SDL_Color backgroundColor, SDL_Color foregroundColor, SDL_Color borderColor, int borderWidth, float *opacity);
+    RenderedItem(SDL_Point *origin, int width, int height, SDL_Color *backgroundColor, SDL_Color *foregroundColor, SDL_Color *borderColor, int borderWidth, float *opacity);
     SDL_Point *origin;
     int width;
     int height;
-    SDL_Color backgroundColor{};
-    SDL_Color foregroundColor{};
-    SDL_Color borderColor{};
+    SDL_Color *backgroundColor{};
+    SDL_Color *foregroundColor{};
+    SDL_Color *borderColor{};
     int borderWidth;
     float *opacity;
     SDL_Rect *renderRect() {
@@ -45,9 +45,10 @@ class UI {
     virtual void updateTexture() = 0;
   };
 
+public:
   class TextBox : public RenderedItem {
   public:
-    TextBox(SDL_Point *origin, int width, int height, SDL_Color backgroundColor, SDL_Color foregroundColor, SDL_Color borderColor, int borderWidth, float *opacity, char *text, TTF_Font *font);
+    TextBox(SDL_Point *origin, int width, int height, SDL_Color *backgroundColor, SDL_Color *foregroundColor, SDL_Color *borderColor, int borderWidth, float *opacity, char *text, TTF_Font *font);
     char *text = (char *) "Sample Text";
     TTF_Font *font;
     void updateTexture() override;

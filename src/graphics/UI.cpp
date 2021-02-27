@@ -11,9 +11,9 @@
 UI::RenderedItem::RenderedItem(SDL_Point *origin,
                                int width,
                                int height,
-                               SDL_Color backgroundColor,
-                               SDL_Color foregroundColor,
-                               SDL_Color borderColor,
+                               SDL_Color *backgroundColor,
+                               SDL_Color *foregroundColor,
+                               SDL_Color *borderColor,
                                int borderWidth,
                                float *opacity) {
   this->origin = origin;
@@ -26,9 +26,9 @@ UI::RenderedItem::RenderedItem(SDL_Point *origin,
   this->opacity = opacity;
 }
 
-UI::TextBox::TextBox(SDL_Point *origin, int width, int height, SDL_Color backgroundColor,
-                     SDL_Color foregroundColor, SDL_Color borderColor, int borderWidth,
-                     float *opacity, char *text, TTF_Font *font) : RenderedItem(origin,width,height,backgroundColor,foregroundColor,borderColor,borderWidth,opacity) {
+UI::TextBox::TextBox(SDL_Point *origin, int width, int height, SDL_Color *backgroundColor,
+                     SDL_Color *foregroundColor, SDL_Color *borderColor, int borderWidth,
+                     float *opacity, char *text, TTF_Font *font) : RenderedItem(origin, width, height, backgroundColor, foregroundColor, borderColor, borderWidth, opacity) {
   this->text = text;
   this->font = font;
   this->origin = origin;
@@ -42,7 +42,7 @@ UI::TextBox::TextBox(SDL_Point *origin, int width, int height, SDL_Color backgro
 }
 
 void UI::TextBox::updateTexture() {
-  SDL_Surface *message = TTF_RenderText_Shaded(this->font, this->text, this->foregroundColor, this->backgroundColor);
+  SDL_Surface *message = TTF_RenderText_Shaded(this->font, this->text, *this->foregroundColor, *this->backgroundColor);
   this->texture = SDL_CreateTextureFromSurface(gRenderer, message);
   SDL_FreeSurface(message);
   SDL_QueryTexture(this->texture, NULL, NULL, &this->width, &this->height);
