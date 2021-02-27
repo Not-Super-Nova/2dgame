@@ -5,9 +5,9 @@
 #ifndef INC_2DGAME_CHARACTER_HPP
 #define INC_2DGAME_CHARACTER_HPP
 
-#include "map.hpp"
-#include "sprite.hpp"
-#include "vector.hpp"
+#include "../game/map.hpp"
+#include "../render/sprite.hpp"
+#include "../render/vector.hpp"
 
 class character : public Sprite {
 public:

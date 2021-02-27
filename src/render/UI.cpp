@@ -5,8 +5,8 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 
+#include "../main.hpp"
 #include "UI.hpp"
-#include "main.hpp"
 
 UI::RenderedItem::RenderedItem(SDL_Point *origin,
                                int width,

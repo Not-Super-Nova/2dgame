@@ -1,5 +1,5 @@
+#include "entities/character.hpp"
 #include <SDL2/SDL.h>
-#include "character.hpp"
 
 enum NextScene {
   SCENE_MAIN_MENU,

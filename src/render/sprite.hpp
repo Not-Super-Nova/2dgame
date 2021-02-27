@@ -1,7 +1,7 @@
 #ifndef INC_2DGAME_SPRITE_HPP
 #define INC_2DGAME_SPRITE_HPP
 
-#include "map.hpp"
+#include "../game/map.hpp"
 #include <SDL2/SDL.h>
 
 class Sprite {
