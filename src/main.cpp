@@ -2,6 +2,7 @@
 #include <SDL2/SDL_events.h>
 #include <SDL2/SDL_keycode.h>
 #include <SDL2/SDL_render.h>
+#include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_video.h>
 #include <cstdio>
 #include <cstring>

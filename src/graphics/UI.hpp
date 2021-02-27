@@ -7,7 +7,6 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
-#include <simple2d.h>
 
 enum TextAlignment {
   TEXT_ALIGNMENT_LEFT,
