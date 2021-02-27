@@ -23,6 +23,9 @@ extern NextScene gNextScene;
 extern bool gQuit;
 const int gcTileCount = 32;
 
+extern map *currentMap;
+extern character *createPlayer();
+void windowUpdate(SDL_Event event);
 bool inGameKeyboardHandler(character *player);
 void runSceneInGame();
 

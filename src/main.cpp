@@ -27,10 +27,7 @@ bool gQuit = false;
 NextScene gNextScene = SCENE_MAIN_MENU;
 
 map *currentMap;
-
 character *createPlayer();
-
-void windowUpdate(SDL_Event event);
 
 int main() {
   if (!init())
