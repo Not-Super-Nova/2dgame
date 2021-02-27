@@ -66,7 +66,10 @@ SDL_Texture *loadTexture(char *path) {
 bool loadMedia() {
   bool success = true;
 
-  gCharacterImage = loadTexture((char *) "/home/nova/2dgame/media/character.png");
+  char* characterPath;
+  sprintf(characterPath, "%s/character.png", mediaPath);
+
+  gCharacterImage = loadTexture(characterPath);
 
   return success;
 }

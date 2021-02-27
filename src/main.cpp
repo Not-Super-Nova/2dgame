@@ -1,6 +1,9 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 
+#include <filesystem>
+#include <iostream>
+
 #include "entities/character.hpp"
 #include "game/loaders.hpp"
 
@@ -8,10 +11,13 @@
 
 #include "main.hpp"
 
+namespace fs = std::filesystem;
+
 // TODO: make this set from actual screen. Not everyone has a FHD screen any more.
 int gScreenWidth = 1920;
 int gScreenHeight = 1080;
 char *gcWindowTitle = (char *) "Simple 2D Game";
+const char* mediaPath;
 
 SDL_Window *gWindow;
 SDL_Renderer *gRenderer;
@@ -25,7 +31,12 @@ NextScene gNextScene = SCENE_MAIN_MENU;
 map *currentMap;
 
 void runSceneMainMenu();
-int main() {
+int main(int argc, char *argv[]) {
+
+  std::filesystem::path path = fs::path(argv[0]).parent_path().parent_path();
+  // TODO: bugfix. mediaPath turns to garbage after this
+  mediaPath = (std::string(path.string()).append(std::string("/media"))).c_str();
+
   if (!init())
     throw initException();
   if (!loadMedia())
@@ -63,7 +74,11 @@ int main() {
 }
 
 void runSceneMainMenu() {
-  TTF_Font *titleFont = TTF_OpenFont((char *) "/home/nova/2dgame/media/OpenSans-Light.ttf", 30);
+  char* titleFontPath;
+  sprintf(titleFontPath, "%s/OpenSans-Light.ttf", mediaPath);
+
+  TTF_Font *titleFont = TTF_OpenFont(titleFontPath, 30);
+
   if (titleFont == NULL) {
     printf("%s\n", TTF_GetError());
     throw mediaException();
@@ -114,8 +129,12 @@ void runSceneMainMenu() {
 void runSceneInGame() {
   // Load test map
   // TODO: remove this, and replace with loading maps from saves / source
-  currentMap = new map((char *) "/home/nova/2dgame/media/testMap",
-                       (char *) "/home/nova/2dgame/media/testMap",
+
+  char* testMapPath;
+  sprintf(testMapPath, "%s/testMap", mediaPath);
+
+  currentMap = new map(testMapPath,
+                       testMapPath,
                        4,
                        8);
 

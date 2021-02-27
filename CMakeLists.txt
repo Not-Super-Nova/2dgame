@@ -6,6 +6,6 @@ add_executable(${PROJECT_NAME} src/main.cpp src/game/loaders.cpp src/game/loader
 
 target_link_libraries(${PROJECT_NAME} SDL2 SDL2_image SDL2_ttf)
 
-set(CMAKE_CXX_FLAGS "-Wall -Wextra")
+set(CMAKE_CXX_FLAGS "-Wall -Wextra -std=c++17")
 set(CMAKE_CXX_FLAGS_DEBUG "-ggdb")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3")

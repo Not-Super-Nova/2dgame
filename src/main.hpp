@@ -13,6 +13,7 @@ enum NextScene {
 extern int gScreenWidth;
 extern int gScreenHeight;
 extern char *gcWindowTitle;
+extern const char* mediaPath;
 
 extern SDL_Window *gWindow;
 extern SDL_Renderer *gRenderer;
