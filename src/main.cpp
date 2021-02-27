@@ -24,7 +24,7 @@ int gMovementSpeed = 5;
 SDL_Texture *gCharacterImage;
 bool gDebug = true;
 bool gQuit = false;
-NextScene gNextScene = SCENE_MAIN_MENU;
+NextScene gNextScene = SCENE_IN_GAME;
 
 map *currentMap;
 character *createPlayer();
@@ -39,18 +39,26 @@ int main() {
     switch (gNextScene) {
       case SCENE_MAIN_MENU:
         // TODO: runSceneMainMenu();
+        gQuit = true;
         break;
       case SCENE_IN_GAME:
         runSceneInGame();
         break;
       case SCENE_ABOUT:
         // TODO: runSceneAbout();
+        gQuit = true;
         break;
       case SCENE_SETTINGS:
         // TODO: runSceneSettings();
+        gQuit = true;
         break;
       case SCENE_CUTSCENE:
         // TODO: runSceneCutscene();
+        gQuit = true;
+        break;
+      case SCENE_PAUSE_MENU:
+        // TODO: runScenePauseMenu();
+        gQuit = true;
         break;
     }
   }
@@ -82,7 +90,12 @@ void runSceneInGame() {
   bool stop = false;
   while (!stop) {
 
+    // This line looks a little funky due to code generation
+    // The 'inGameKeyboardHandler' returns the stop value
+    // It's ugly, but it works.
     stop = inGameKeyboardHandler(player);
+
+    gNextScene = SCENE_PAUSE_MENU;
 
     // Create new SDL_Event object, named event
     SDL_Event event;
