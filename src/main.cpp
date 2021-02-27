@@ -81,7 +81,7 @@ void runSceneMainMenu() {
   white->g = 255;
   white->b = 255;
   white->a = 255;
-  UI::TextBox *titleTextBox = new UI::TextBox(menuTextBoxOrigin, backgroundColor, white, NULL, NULL, NULL, gcWindowTitle, titleFont);
+  UI::TextBox *titleTextBox = new UI::TextBox(menuTextBoxOrigin, backgroundColor, white, NULL, 0, NULL, gcWindowTitle, titleFont);
   titleTextBox->origin->x = (gScreenWidth / 2) - (titleTextBox->width / 2);
   titleTextBox->updateTexture();
   bool continueMenu = true;
