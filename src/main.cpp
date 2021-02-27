@@ -9,7 +9,6 @@
 #include "entities/character.hpp"
 #include "game/loaders.hpp"
 #include "game/map.hpp"
-#include "graphics/sprite.hpp"
 
 #include "main.hpp"
 
