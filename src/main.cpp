@@ -269,5 +269,7 @@ void windowUpdate(SDL_Event event) {
       // Add function that will likely be made with the UI
       // TODO: pauseGame();
       break;
+    case SDL_WINDOWEVENT_CLOSE:
+      exit(0);
   }
 }
