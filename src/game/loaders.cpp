@@ -68,7 +68,7 @@ bool loadMedia() {
 
   char* characterPath = (char *)(malloc(4096));
   memset((void*)characterPath, '\0', 4096);
-  sprintf(characterPath, "%s/character.png", gMediaPath);
+  snprintf(characterPath, 4096, "%s/character.png", gMediaPath);
 
   gCharacterImage = loadTexture(characterPath);
   free(characterPath);

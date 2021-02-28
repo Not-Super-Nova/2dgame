@@ -77,7 +77,7 @@ int main(int argc, char *argv[]) {
 void runSceneMainMenu() {
   char* titleFontPath = (char*)malloc(4096);
   memset((void*)titleFontPath, '\0', 4096);
-  sprintf(titleFontPath, "%s/OpenSans-Light.ttf", gMediaPath);
+  snprintf(titleFontPath, 4096, "%s/OpenSans-Light.ttf", gMediaPath);
 
   TTF_Font *titleFont = TTF_OpenFont(titleFontPath, 30);
   free(titleFontPath);
@@ -134,7 +134,7 @@ void runSceneInGame() {
 
   char* testMapPath = (char*)malloc(4096);
   memset((void*)testMapPath, '\0', 4096);
-  sprintf(testMapPath, "%s/testMap", gMediaPath);
+  snprintf(testMapPath, 4096, "%s/testMap", gMediaPath);
 
   currentMap = new map(testMapPath,
                        testMapPath,
