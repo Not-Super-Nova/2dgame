@@ -13,7 +13,7 @@ enum NextScene {
 extern int gScreenWidth;
 extern int gScreenHeight;
 extern char *gcWindowTitle;
-extern const char* mediaPath;
+extern const char *gMediaPath;
 
 extern SDL_Window *gWindow;
 extern SDL_Renderer *gRenderer;
@@ -31,13 +31,13 @@ bool inGameKeyboardHandler(character *player);
 void runSceneInGame();
 
 struct initException : public std::exception {
-  const char *what() const noexcept override {
+  [[nodiscard]] const char *what() const noexcept override {
     return "Failed to initialise game engine, quitting.";//TODO: flesh out exception generation
   }
 };
 
 struct mediaException : public std::exception {
-  const char *what() const noexcept override {
+  [[nodiscard]] const char *what() const noexcept override {
     return "Failed to load required game media, quitting.";//TODO: flesh out exception generation
   }
 };

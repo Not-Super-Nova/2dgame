@@ -66,11 +66,12 @@ SDL_Texture *loadTexture(char *path) {
 bool loadMedia() {
   bool success = true;
 
-  char* characterPath;
-  sprintf(characterPath, "%s/character.png", mediaPath);
+  char* characterPath = (char *)(malloc(4096));
+  memset((void*)characterPath, '\0', 4096);
+  sprintf(characterPath, "%s/character.png", gMediaPath);
 
   gCharacterImage = loadTexture(characterPath);
-
+  free(characterPath);
   return success;
 }
 

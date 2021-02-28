@@ -17,7 +17,7 @@ namespace fs = std::filesystem;
 int gScreenWidth = 1920;
 int gScreenHeight = 1080;
 char *gcWindowTitle = (char *) "Simple 2D Game";
-const char* mediaPath;
+const char *gMediaPath;
 
 SDL_Window *gWindow;
 SDL_Renderer *gRenderer;
@@ -34,8 +34,9 @@ void runSceneMainMenu();
 int main(int argc, char *argv[]) {
 
   std::filesystem::path path = fs::path(argv[0]).parent_path().parent_path();
-  // TODO: bugfix. mediaPath turns to garbage after this
-  mediaPath = (std::string(path.string()).append(std::string("/media"))).c_str();
+  // TODO: bugfix. gMediaPath turns to garbage after this
+  gMediaPath = ((new std::string(path.string()))->append(std::string("/media"))).c_str();
+  printf("%s\n", gMediaPath);
 
   if (!init())
     throw initException();
@@ -74,11 +75,12 @@ int main(int argc, char *argv[]) {
 }
 
 void runSceneMainMenu() {
-  char* titleFontPath;
-  sprintf(titleFontPath, "%s/OpenSans-Light.ttf", mediaPath);
+  char* titleFontPath = (char*)malloc(4096);
+  memset((void*)titleFontPath, '\0', 4096);
+  sprintf(titleFontPath, "%s/OpenSans-Light.ttf", gMediaPath);
 
   TTF_Font *titleFont = TTF_OpenFont(titleFontPath, 30);
-
+  free(titleFontPath);
   if (titleFont == NULL) {
     printf("%s\n", TTF_GetError());
     throw mediaException();
@@ -130,8 +132,9 @@ void runSceneInGame() {
   // Load test map
   // TODO: remove this, and replace with loading maps from saves / source
 
-  char* testMapPath;
-  sprintf(testMapPath, "%s/testMap", mediaPath);
+  char* testMapPath = (char*)malloc(4096);
+  memset((void*)testMapPath, '\0', 4096);
+  sprintf(testMapPath, "%s/testMap", gMediaPath);
 
   currentMap = new map(testMapPath,
                        testMapPath,
