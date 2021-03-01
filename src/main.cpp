@@ -31,12 +31,11 @@ NextScene gNextScene = SCENE_MAIN_MENU;
 map *currentMap;
 
 void runSceneMainMenu();
-int main(int argc, char *argv[]) {
+int main([[maybe_unused]] int argc, char *argv[]) {
 
   std::filesystem::path path = fs::path(argv[0]).parent_path().parent_path();
-  // TODO: bugfix. gMediaPath turns to garbage after this
   gMediaPath = ((new std::string(path.string()))->append(std::string("/media"))).c_str();
-  printf("%s\n", gMediaPath);
+  printf("Media path: %s\n", gMediaPath);
 
   if (!init())
     throw initException();
@@ -75,33 +74,40 @@ int main(int argc, char *argv[]) {
 }
 
 void runSceneMainMenu() {
-  char* titleFontPath = (char*)malloc(4096);
-  memset((void*)titleFontPath, '\0', 4096);
+  char *titleFontPath = (char *) malloc(4096);
+  memset((void *) titleFontPath, '\0', 4096);
   snprintf(titleFontPath, 4096, "%s/OpenSans-Light.ttf", gMediaPath);
 
   TTF_Font *titleFont = TTF_OpenFont(titleFontPath, 30);
   free(titleFontPath);
-  if (titleFont == NULL) {
+
+  if (titleFont == nullptr) {
     printf("%s\n", TTF_GetError());
     throw mediaException();
   }
-  SDL_Point *menuTextBoxOrigin = new SDL_Point();
+
+  auto *menuTextBoxOrigin = new SDL_Point();
   menuTextBoxOrigin->x = 0;
   menuTextBoxOrigin->y = gScreenHeight / 4;
-  SDL_Color *backgroundColor = new SDL_Color();
+
+  auto *backgroundColor = new SDL_Color();
   backgroundColor->r = 0;
   backgroundColor->g = 0;
   backgroundColor->b = 0;
   backgroundColor->a = 255;
-  SDL_Color *white = new SDL_Color();
+
+  auto *white = new SDL_Color();
   white->r = 255;
   white->g = 255;
   white->b = 255;
   white->a = 255;
-  UI::TextBox *titleTextBox = new UI::TextBox(menuTextBoxOrigin, backgroundColor, white, NULL, 0, NULL, gcWindowTitle, titleFont);
+
+  auto *titleTextBox = new UI::TextBox(menuTextBoxOrigin, backgroundColor, white, nullptr, 0, nullptr, gcWindowTitle, titleFont);
+
   titleTextBox->origin->x = (gScreenWidth / 2) - (titleTextBox->width / 2);
   titleTextBox->updateTexture();
   bool continueMenu = true;
+
   while (continueMenu) {
     // Create new SDL_Event object, named event
     SDL_Event event;
@@ -113,15 +119,17 @@ void runSceneMainMenu() {
         // Send to function specific to window events
         windowUpdate(event);
       if (event.type == SDL_MOUSEBUTTONDOWN) {
-        SDL_Point *mousePosition = new SDL_Point();
+        auto *mousePosition = new SDL_Point();
         SDL_GetMouseState(&mousePosition->x, &mousePosition->y);
+
         if (SDL_PointInRect(mousePosition, titleTextBox->renderRect())) {
           gNextScene = SCENE_IN_GAME;
           continueMenu = false;
         }
       }
     }
-    SDL_RenderCopy(gRenderer, titleTextBox->texture, NULL, titleTextBox->renderRect());
+
+    SDL_RenderCopy(gRenderer, titleTextBox->texture, nullptr, titleTextBox->renderRect());
     SDL_RenderPresent(gRenderer);
     SDL_PumpEvents();
     SDL_RenderClear(gRenderer);
@@ -132,8 +140,8 @@ void runSceneInGame() {
   // Load test map
   // TODO: remove this, and replace with loading maps from saves / source
 
-  char* testMapPath = (char*)malloc(4096);
-  memset((void*)testMapPath, '\0', 4096);
+  char *testMapPath = (char *) malloc(4096);
+  memset((void *) testMapPath, '\0', 4096);
   snprintf(testMapPath, 4096, "%s/testMap", gMediaPath);
 
   currentMap = new map(testMapPath,
@@ -142,13 +150,13 @@ void runSceneInGame() {
                        8);
 
   // TODO: Load world position from save file
-  SDL_Point *worldPos = new SDL_Point();
+  auto *worldPos = new SDL_Point();
   worldPos->x = 0;
   worldPos->y = 0;
 
-  character *player = new character(gCharacterImage, worldPos, currentMap, gMovementSpeed);
+  auto *player = new character(gCharacterImage, worldPos, currentMap, gMovementSpeed);
 
-  SDL_Point *cameraWorldPos = new SDL_Point();
+  auto *cameraWorldPos = new SDL_Point();
   cameraWorldPos->x = 0;
   cameraWorldPos->y = 0;
 
@@ -176,21 +184,21 @@ void runSceneInGame() {
     // Calculate camera position on the X axis, according to screen size and world size
     if (player->worldPos->x < (gScreenWidth * 0.5) - (player->width * 0.5))
       cameraWorldPos->x = 0;
-    else if (player->worldPos->x > currentMap->pixelCountX() - (0.5 * gScreenWidth) - (0.5 * player->width))
+    else if (player->worldPos->x > currentMap->pixelCountX() - (gScreenWidth * 0.5) - (player->width * 0.5))
       cameraWorldPos->x = currentMap->pixelCountX() - gScreenWidth;
     else
-      cameraWorldPos->x = (int)(player->worldPos->x - (gScreenWidth * 0.5) + (player->width * 0.5));
+      cameraWorldPos->x = (int) (player->worldPos->x - (gScreenWidth * 0.5) + (player->width * 0.5));
 
     // Calculate camera position on the Y axis, according to screen size and world size
     if (player->worldPos->y < (gScreenHeight * 0.5) - (player->height * 0.5))
       cameraWorldPos->y = 0;
-    else if (player->worldPos->y > currentMap->pixelCountY() - (0.5 * gScreenHeight) - (0.5 * player->height))
+    else if (player->worldPos->y > currentMap->pixelCountY() - (gScreenHeight * 0.5) - (player->height * 0.5))
       cameraWorldPos->y = currentMap->pixelCountY() - gScreenHeight;
     else
       cameraWorldPos->y = player->worldPos->y - (gScreenHeight * 0.5) + (player->height * 0.5);
 
     // Calculate where tiles, NPCs, etc, *have* to be rendered
-    SDL_Rect *renderBoundary = new SDL_Rect();
+    auto *renderBoundary = new SDL_Rect();
     renderBoundary->x = 0;
     renderBoundary->y = 0;
     renderBoundary->w = gScreenWidth;
@@ -205,17 +213,17 @@ void runSceneInGame() {
       }
 
       // Get current tile origin (top left point)
-      SDL_Point *tileWorldPos = new SDL_Point();
+      auto *tileWorldPos = new SDL_Point();
       tileWorldPos->x = currentMap->tileWidth * countX - 1;
       tileWorldPos->y = currentMap->tileHeight * countY;
 
       // Calculate where that point is in screen space
-      SDL_Point *tileScreenPos = new SDL_Point();
+      auto *tileScreenPos = new SDL_Point();
       tileScreenPos->x = tileWorldPos->x - cameraWorldPos->x;
       tileScreenPos->y = tileWorldPos->y - cameraWorldPos->y;
 
       // Calculate area the tile would cover
-      SDL_Rect *renderRectangle = new SDL_Rect();
+      auto *renderRectangle = new SDL_Rect();
       renderRectangle->x = tileScreenPos->x;
       renderRectangle->y = tileScreenPos->y;
       renderRectangle->w = currentMap->tileWidth;
@@ -223,19 +231,19 @@ void runSceneInGame() {
 
       if (SDL_HasIntersection(renderRectangle, renderBoundary)) {
         // Tile in range, render it
-        SDL_RenderCopy(gRenderer, currentMap->tiles[tileIndex], NULL, renderRectangle);
+        SDL_RenderCopy(gRenderer, currentMap->tiles[tileIndex], nullptr, renderRectangle);
       }
       countX++;
     }
 
-    //Render main character
-    SDL_Rect *characterRenderRect = new SDL_Rect();
+    // Render main character
+    auto *characterRenderRect = new SDL_Rect();
     SDL_Point *characterScreenPos = player->screenPos(new vector(cameraWorldPos->x, cameraWorldPos->y));
     characterRenderRect->x = characterScreenPos->x;
     characterRenderRect->y = characterScreenPos->y;
     characterRenderRect->w = player->width;
     characterRenderRect->h = player->height;
-    SDL_RenderCopy(gRenderer, player->texture, NULL, characterRenderRect);
+    SDL_RenderCopy(gRenderer, player->texture, nullptr, characterRenderRect);
 
     // General SDL Library stuff for finishing render, and updating events
     SDL_RenderPresent(gRenderer);

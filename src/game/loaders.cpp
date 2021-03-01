@@ -66,8 +66,8 @@ SDL_Texture *loadTexture(char *path) {
 bool loadMedia() {
   bool success = true;
 
-  char* characterPath = (char *)(malloc(4096));
-  memset((void*)characterPath, '\0', 4096);
+  char *characterPath = (char *) (malloc(4096));
+  memset((void *) characterPath, '\0', 4096);
   snprintf(characterPath, 4096, "%s/character.png", gMediaPath);
 
   gCharacterImage = loadTexture(characterPath);

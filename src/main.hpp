@@ -32,12 +32,12 @@ void runSceneInGame();
 
 struct initException : public std::exception {
   [[nodiscard]] const char *what() const noexcept override {
-    return "Failed to initialise game engine, quitting.";//TODO: flesh out exception generation
+    return "Failed to initialise game engine, quitting.";// TODO: flesh out exception generation
   }
 };
 
 struct mediaException : public std::exception {
   [[nodiscard]] const char *what() const noexcept override {
-    return "Failed to load required game media, quitting.";//TODO: flesh out exception generation
+    return "Failed to load required game media, quitting.";// TODO: flesh out exception generation
   }
 };

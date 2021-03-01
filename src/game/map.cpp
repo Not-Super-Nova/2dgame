@@ -40,14 +40,14 @@ map::map(char *tilePath, char *dataPath, int tileCountX, int tileCountY) {
     tiles[0] = loadTexture(texturePath);
 
     // Get texture dimensions
-    SDL_QueryTexture(tiles[0], NULL, NULL, &this->tileWidth, &this->tileHeight);
+    SDL_QueryTexture(tiles[0], nullptr, nullptr, &this->tileWidth, &this->tileHeight);
 
     for (int i = 1; i < 32; i++) {
       // Load next texture
       snprintf(texturePath, 4096, "%s/%i.png", tilePath, i);
       tiles[i] = loadTexture(texturePath);
 
-      if (tiles[i] == NULL) {
+      if (tiles[i] == nullptr) {
         // Handle having less than 32 tiles
         if (tileCountTotal == 0)
           tileCountTotal = i;
@@ -58,7 +58,7 @@ map::map(char *tilePath, char *dataPath, int tileCountX, int tileCountY) {
       // Check dimensions match other tiles
       int tempHeight;
       int tempWidth;
-      SDL_QueryTexture(tiles[i], NULL, NULL, &tempWidth, &tempHeight);
+      SDL_QueryTexture(tiles[i], nullptr, nullptr, &tempWidth, &tempHeight);
       if (tempWidth != this->tileWidth || tempHeight != this->tileHeight) {
         free(texturePath);
         throw mapLoadingException();
@@ -69,7 +69,7 @@ map::map(char *tilePath, char *dataPath, int tileCountX, int tileCountY) {
     }
 
     // Quick fix for having exactly 32 tiles
-    if (tileCountTotal == 0 && tiles[0] != NULL) {
+    if (tileCountTotal == 0 && tiles[0] != nullptr) {
       tileCountTotal = 32;
     }
 
