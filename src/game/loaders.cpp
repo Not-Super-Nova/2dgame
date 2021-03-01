@@ -3,13 +3,13 @@
 //
 #include "loaders.hpp"
 #include "../main.hpp"
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
-#include <SDL2/SDL_keyboard.h>
+#include <SDL2/SDL_ttf.h>
 
 bool init() {
 
   bool success = true;
+
+  TTF_Init();
 
   if (SDL_Init(SDL_INIT_VIDEO) < 0) {
     printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
@@ -20,13 +20,12 @@ bool init() {
       gScreenWidth = 1280;
       gScreenHeight = 720;
       gWindow = SDL_CreateWindow(gcWindowTitle, SDL_WINDOWPOS_UNDEFINED,
-                           SDL_WINDOWPOS_UNDEFINED, gScreenWidth, gScreenHeight,
-                           SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE /*| SDL_WINDOW_FULLSCREEN*/);
-    }
-    else {
+                                 SDL_WINDOWPOS_UNDEFINED, gScreenWidth, gScreenHeight,
+                                 SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE /*| SDL_WINDOW_FULLSCREEN*/);
+    } else {
       gWindow = SDL_CreateWindow(gcWindowTitle, SDL_WINDOWPOS_UNDEFINED,
-                           SDL_WINDOWPOS_UNDEFINED, gScreenWidth, gScreenHeight,
-                           SDL_WINDOW_SHOWN | SDL_WINDOW_FULLSCREEN);
+                                 SDL_WINDOWPOS_UNDEFINED, gScreenWidth, gScreenHeight,
+                                 SDL_WINDOW_SHOWN | SDL_WINDOW_FULLSCREEN);
     }
     if (gWindow == NULL) {
       printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
@@ -67,7 +66,26 @@ SDL_Texture *loadTexture(char *path) {
 bool loadMedia() {
   bool success = true;
 
-  gCharacterImage = loadTexture((char *) "media/character.png");
+  char *characterPath = (char *) (malloc(4096));
+  memset((void *) characterPath, '\0', 4096);
+  snprintf(characterPath, 4096, "%s/character.png", gMediaPath);
 
+  gCharacterImage = loadTexture(characterPath);
+  free(characterPath);
   return success;
+}
+
+// Destroy objects ready for closing
+// TODO: map textures
+void unload() {
+  SDL_DestroyTexture(gCharacterImage);
+  gCharacterImage = NULL;
+
+  SDL_DestroyRenderer(gRenderer);
+  gRenderer = NULL;
+
+  SDL_DestroyWindow(gWindow);
+  gWindow = NULL;
+
+  SDL_Quit();
 }

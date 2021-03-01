@@ -10,7 +10,7 @@ If you feel like there is anything missing, submit a PR with an explanation of w
 
 ## mapManager
 - Array of pointers for map objects, and enum for builtins
-- Functions to load in new maps, and destroy unneeded ones in case of lowmem
+- Functions to load in new maps, and destroy unneeded ones in case of low memory
 - Functions for switching maps, and handling map events in unloaded maps (such as NPC navigation)
 
 ## map

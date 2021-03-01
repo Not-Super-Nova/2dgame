@@ -11,5 +11,5 @@ bool init();
 bool loadMedia();
 SDL_Texture *loadTexture(char *path);
 SDL_Surface *loadSurface(char *path);
-
+void unload();
 #endif// INC_2DGAME_LOADERS_HPP

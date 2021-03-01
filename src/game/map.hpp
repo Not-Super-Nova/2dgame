@@ -8,38 +8,38 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_rect.h>
-#include <filesystem>
 #include <exception>
+#include <filesystem>
 
 class map {
-public: bool valid();
-public: map(char* tilePath, char*dataPath, int tileWidth, int tileHeight, int tileCountX, int tileCountY);
+public:
+  bool valid() const;
+
+public:
+  map(char *tilePath, char *dataPath, int tileCountX, int tileCountY);
   int id;
-  char* tilePath;
-  char* collisionDataPath;
+  char *tilePath;
+  char *collisionDataPath;
   int tileWidth;
   int tileHeight;
   int tileCountX;
   int tileCountY;
   int tileCountTotal;
-  int pixelCountX()
-  {
-    return tileWidth*tileCountX;
+  int pixelCountX() const {
+    return tileWidth * tileCountX;
   }
-  int pixelCountY()
-  {
-    return tileHeight*tileCountY;
+  int pixelCountY() const {
+    return tileHeight * tileCountY;
   }
   SDL_Texture *tiles[32];
-  SDL_Rect* collisionBoxes[64];
+  SDL_Rect *collisionBoxes[64];
 
   static int statFile(const char *tilePath);
 };
 
-struct mapLoadingException: public std::exception {
-  const char * what () const noexcept override
-  {
-    return "Error loading map"; //TODO: flesh out exception generation
+struct mapLoadingException : public std::exception {
+  const char *what() const noexcept override {
+    return "Error loading map.";// TODO: flesh out exception generation
   }
 };
 
