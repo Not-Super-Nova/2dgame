@@ -31,6 +31,7 @@ NextScene gNextScene = SCENE_MAIN_MENU;
 map *currentMap;
 
 void runSceneMainMenu();
+void runSceneAbout();
 int main([[maybe_unused]] int argc, char *argv[]) {
 
   std::filesystem::path path = fs::path(argv[0]).parent_path().parent_path();
@@ -49,8 +50,7 @@ int main([[maybe_unused]] int argc, char *argv[]) {
         runSceneInGame();
         break;
       case SCENE_ABOUT:
-        // TODO: runSceneAbout();
-        gQuit = true;
+        runSceneAbout();
         break;
       case SCENE_SETTINGS:
         // TODO: runSceneSettings();
@@ -69,6 +69,86 @@ int main([[maybe_unused]] int argc, char *argv[]) {
   unload();
 
   return 0;
+}
+
+void runSceneAbout() {
+  char *fontPath = (char *) malloc(4096);
+  memset((void *) fontPath, '\0', 4096);
+  snprintf(fontPath, 4096, "%s/OpenSans-Light.ttf", gMediaPath);
+
+  TTF_Font *titleFont = TTF_OpenFont(fontPath, 30);
+  TTF_Font *menuFont = TTF_OpenFont(fontPath, 18);
+  free(fontPath);
+
+  if (titleFont == nullptr || menuFont == nullptr) {
+    printf("%s\n", TTF_GetError());
+    throw mediaException();
+  }
+
+  auto *menuTextBoxOrigin = new SDL_Point();
+  menuTextBoxOrigin->x = 0;
+  menuTextBoxOrigin->y = gScreenHeight / 4;
+
+  auto *backgroundColor = new SDL_Color();
+  backgroundColor->r = 0;
+  backgroundColor->g = 0;
+  backgroundColor->b = 0;
+  backgroundColor->a = 255;
+
+  auto *white = new SDL_Color();
+  white->r = 255;
+  white->g = 255;
+  white->b = 255;
+  white->a = 255;
+
+  auto *titleTextBox =
+      new UI::TextBox(menuTextBoxOrigin, backgroundColor, white, nullptr, 0, nullptr, gcWindowTitle, titleFont);
+
+  titleTextBox->updateTexture();
+  titleTextBox->origin->x = (gScreenWidth / 2) - (titleTextBox->width / 2);
+
+  auto *authorTextOrigin = new SDL_Point();
+  authorTextOrigin->x = 0;
+  authorTextOrigin->y = menuTextBoxOrigin->y + titleTextBox->height + 32;
+
+  auto *authorText = new UI::TextBox(authorTextOrigin, backgroundColor, white, nullptr, 0, nullptr, (char*)"Created by Nova and Liv", menuFont);
+
+  authorText->updateTexture();
+  authorText->origin->x = (gScreenWidth / 2) - (authorText->width / 2);
+
+  auto *githubTextOrigin = new SDL_Point();
+  githubTextOrigin->x = 0;
+  githubTextOrigin->y = authorTextOrigin->y + authorText->height + 8;
+
+  auto *githubText = new UI::TextBox(githubTextOrigin, backgroundColor, white, nullptr, 0, nullptr, (char*)"https://github.com/Not-Super-Nova/2dgame", menuFont);
+
+  githubText->updateTexture();
+  githubText->origin->x = (gScreenWidth / 2) - (githubText->width / 2);
+
+  bool continueMenu = true;
+
+  while (continueMenu) {
+    // Create new SDL_Event object, named event
+    SDL_Event event;
+    // Loop through all events available from the SDL2 library
+    // the "&event" section means that it sets the event variable to the next available event to process
+    while (SDL_PollEvent(&event)) {
+      // If the event is a window event,
+      if (event.type == SDL_WINDOWEVENT)
+        // Send to function specific to window events
+        windowUpdate(event);
+      if (event.type == SDL_MOUSEBUTTONDOWN) {
+        continueMenu = false;
+      }
+    }
+    SDL_RenderCopy(gRenderer, titleTextBox->texture, nullptr, titleTextBox->renderRect());
+    SDL_RenderCopy(gRenderer, authorText->texture, nullptr, authorText->renderRect());
+    SDL_RenderCopy(gRenderer, githubText->texture, nullptr, githubText->renderRect());
+    SDL_RenderPresent(gRenderer);
+    SDL_PumpEvents();
+    SDL_RenderClear(gRenderer);
+  }
+  gNextScene = SCENE_MAIN_MENU;
 }
 
 void runSceneMainMenu() {
@@ -116,6 +196,15 @@ void runSceneMainMenu() {
   newGameButton->updateTexture();
   newGameButton->origin->x = (gScreenWidth / 2) - (newGameButton->width / 2);
 
+  auto *aboutButtonOrigin = new SDL_Point();
+  aboutButtonOrigin->x = 0;
+  aboutButtonOrigin->y = newGameButtonOrigin->y + newGameButton->height + 64;
+
+  auto *aboutButton = new UI::TextButton(aboutButtonOrigin, backgroundColor, white, nullptr, 0, nullptr, 0, 0,
+                                           (char *) "About Game", menuFont);
+  aboutButton->updateTexture();
+  aboutButton->origin->x = (gScreenWidth / 2) - (aboutButton->width / 2);
+
   bool continueMenu = true;
 
   while (continueMenu) {
@@ -136,10 +225,19 @@ void runSceneMainMenu() {
           gNextScene = SCENE_IN_GAME;
           continueMenu = false;
         }
+        if (aboutButton->CheckClick(mousePosition)) {
+          gNextScene = SCENE_ABOUT;
+          continueMenu = false;
+        }
       }
+    }
+    if (gKeyboardState[SDL_SCANCODE_ESCAPE]) {
+      printf("Quit requested, shutting down");
+      continueMenu = false;
     }
     SDL_RenderCopy(gRenderer, titleTextBox->texture, nullptr, titleTextBox->renderRect());
     SDL_RenderCopy(gRenderer, newGameButton->texture, nullptr, newGameButton->renderRect());
+    SDL_RenderCopy(gRenderer, aboutButton->texture, nullptr, aboutButton->renderRect());
     SDL_RenderPresent(gRenderer);
     SDL_PumpEvents();
     SDL_RenderClear(gRenderer);
