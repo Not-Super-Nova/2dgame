@@ -74,14 +74,15 @@ int main([[maybe_unused]] int argc, char *argv[]) {
 }
 
 void runSceneMainMenu() {
-  char *titleFontPath = (char *) malloc(4096);
-  memset((void *) titleFontPath, '\0', 4096);
-  snprintf(titleFontPath, 4096, "%s/OpenSans-Light.ttf", gMediaPath);
+  char *fontPath = (char *) malloc(4096);
+  memset((void *) fontPath, '\0', 4096);
+  snprintf(fontPath, 4096, "%s/OpenSans-Light.ttf", gMediaPath);
 
-  TTF_Font *titleFont = TTF_OpenFont(titleFontPath, 30);
-  free(titleFontPath);
+  TTF_Font *titleFont = TTF_OpenFont(fontPath, 30);
+  TTF_Font *menuFont = TTF_OpenFont(fontPath, 18);
+  free(fontPath);
 
-  if (titleFont == nullptr) {
+  if (titleFont == nullptr || menuFont == nullptr) {
     printf("%s\n", TTF_GetError());
     throw mediaException();
   }
@@ -106,6 +107,16 @@ void runSceneMainMenu() {
 
   titleTextBox->origin->x = (gScreenWidth / 2) - (titleTextBox->width / 2);
   titleTextBox->updateTexture();
+
+  auto *newGameButtonOrigin = new SDL_Point();
+  newGameButtonOrigin->x = 0;
+  newGameButtonOrigin->y = menuTextBoxOrigin->y + titleTextBox->height + 64;
+
+  auto *newGameButton = new UI::TextButton(newGameButtonOrigin, backgroundColor, white, nullptr, 0, nullptr, 0, 0, (char *) "New Game", menuFont);
+  newGameButton->updateTexture();
+  newGameButton->origin->x = (gScreenWidth / 2) - (newGameButton->width / 2);
+
+
   bool continueMenu = true;
 
   while (continueMenu) {
@@ -122,14 +133,14 @@ void runSceneMainMenu() {
         auto *mousePosition = new SDL_Point();
         SDL_GetMouseState(&mousePosition->x, &mousePosition->y);
 
-        if (SDL_PointInRect(mousePosition, titleTextBox->renderRect())) {
+        if (newGameButton->CheckClick(mousePosition)) {
           gNextScene = SCENE_IN_GAME;
           continueMenu = false;
         }
       }
     }
-
     SDL_RenderCopy(gRenderer, titleTextBox->texture, nullptr, titleTextBox->renderRect());
+    SDL_RenderCopy(gRenderer, newGameButton->texture, nullptr, newGameButton->renderRect());
     SDL_RenderPresent(gRenderer);
     SDL_PumpEvents();
     SDL_RenderClear(gRenderer);

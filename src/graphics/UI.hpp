@@ -32,7 +32,7 @@ class UI {
     SDL_Color *borderColor{};
     int borderWidth;
     float *opacity;
-    SDL_Rect *renderRect() const {
+    [[nodiscard]] SDL_Rect *renderRect() const {
       SDL_Rect *temp = new SDL_Rect();
       temp->x = origin->x;
       temp->y = origin->y;
@@ -56,11 +56,24 @@ public:
   class Image : public RenderedItem {
   };
 
-  class BaseButton : public RenderedItem {};
+  class BaseButton : public RenderedItem {
+  public:
+    BaseButton(SDL_Point *origin, SDL_Color *backgroundColor, SDL_Color *foregroundColor, SDL_Color *borderColor, int borderWidth, float *opacity, int width, int height);
+  public: bool CheckClick(SDL_Point *clickLocation);
+    void updateTexture() override;
+  };
 
-  class TextButton : public BaseButton {};
+  class TextButton : public BaseButton {
+  public:
+    TextButton(SDL_Point *origin, SDL_Color *backgroundColor, SDL_Color *foregroundColor, SDL_Color *borderColor, int borderWidth, float *opacity, int width, int height, char *text, TTF_Font *font);
+    char *text;
+    TTF_Font *font;
+    void updateTexture() override;
+  };
 
-  class ImageButton : public BaseButton {};
+  class ImageButton : public BaseButton {
+    ImageButton() : BaseButton(nullptr,nullptr,nullptr,nullptr,0,nullptr,100,100) {}
+  };
 
   class Slider : public RenderedItem {};
 
