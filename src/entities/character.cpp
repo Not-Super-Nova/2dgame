@@ -9,7 +9,8 @@ void character::Move(int deltaX, int deltaY) {
   this->worldPos->y += deltaY;
 }
 
-character::character(SDL_Texture *texture, SDL_Point *worldPos, map *currentMap, int movementSpeed) : Sprite(texture, worldPos, currentMap) {
+character::character(SDL_Texture *texture, SDL_Point *worldPos, map *currentMap, int movementSpeed)
+    : Sprite(texture, worldPos, currentMap) {
   this->texture = texture;
   int tempWidth;
   int tempHeight;
@@ -29,9 +30,7 @@ SDL_Point *character::screenPos(vector *offset) {
   return output;
 }
 
-void character::setCoords(SDL_Point *worldSpace) {
-  this->worldPos = worldSpace;
-}
+void character::setCoords(SDL_Point *worldSpace) { this->worldPos = worldSpace; }
 
 void character::setLocation(map *Map, SDL_Point *worldSpace) {
   this->currentMap = Map;

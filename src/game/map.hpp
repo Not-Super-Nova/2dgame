@@ -25,12 +25,8 @@ public:
   int tileCountX;
   int tileCountY;
   int tileCountTotal;
-  int pixelCountX() const {
-    return tileWidth * tileCountX;
-  }
-  int pixelCountY() const {
-    return tileHeight * tileCountY;
-  }
+  int pixelCountX() const { return tileWidth * tileCountX; }
+  int pixelCountY() const { return tileHeight * tileCountY; }
   SDL_Texture *tiles[32];
   SDL_Rect *collisionBoxes[64];
 

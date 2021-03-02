@@ -8,9 +8,7 @@
 
 // Calculate if map dimensions make sense, given array sizes
 bool map::valid() const {
-  if (tileCountX * tileCountY > 32) {
-    return false;
-  }
+  if (tileCountX * tileCountY > 32) { return false; }
   return true;
 }
 
@@ -19,8 +17,7 @@ map::map(char *tilePath, char *dataPath, int tileCountX, int tileCountY) {
   this->tileCountX = tileCountX;
   this->tileCountY = tileCountY;
 
-  if (!valid())
-    throw mapLoadingException();
+  if (!valid()) throw mapLoadingException();
 
   int tilePathType = statFile(tilePath);
   int collisionDataPathType = statFile(dataPath);
@@ -49,8 +46,7 @@ map::map(char *tilePath, char *dataPath, int tileCountX, int tileCountY) {
 
       if (tiles[i] == nullptr) {
         // Handle having less than 32 tiles
-        if (tileCountTotal == 0)
-          tileCountTotal = i;
+        if (tileCountTotal == 0) tileCountTotal = i;
         else
           break;
       }
@@ -69,20 +65,14 @@ map::map(char *tilePath, char *dataPath, int tileCountX, int tileCountY) {
     }
 
     // Quick fix for having exactly 32 tiles
-    if (tileCountTotal == 0 && tiles[0] != nullptr) {
-      tileCountTotal = 32;
-    }
+    if (tileCountTotal == 0 && tiles[0] != nullptr) { tileCountTotal = 32; }
 
     // Free memory to avoid a leak
     free(texturePath);
   } else {
     // Something doesn't add up. Work out what here, and complain about it.
-    if (tilePathType != 1) {
-      printf("Path %s is invalid\n", tilePath);
-    }
-    if (collisionDataPathType != 1) {
-      printf("Path %s is invalid\n", dataPath);
-    }
+    if (tilePathType != 1) { printf("Path %s is invalid\n", tilePath); }
+    if (collisionDataPathType != 1) { printf("Path %s is invalid\n", dataPath); }
     throw mapLoadingException();
   }
 }

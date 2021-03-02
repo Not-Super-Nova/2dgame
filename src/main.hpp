@@ -1,14 +1,7 @@
 #include "entities/character.hpp"
 #include <SDL2/SDL.h>
 
-enum NextScene {
-  SCENE_MAIN_MENU,
-  SCENE_IN_GAME,
-  SCENE_CUTSCENE,
-  SCENE_SETTINGS,
-  SCENE_ABOUT,
-  SCENE_PAUSE_MENU
-};
+enum NextScene { SCENE_MAIN_MENU, SCENE_IN_GAME, SCENE_CUTSCENE, SCENE_SETTINGS, SCENE_ABOUT, SCENE_PAUSE_MENU };
 
 extern int gScreenWidth;
 extern int gScreenHeight;

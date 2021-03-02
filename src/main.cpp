@@ -37,10 +37,8 @@ int main([[maybe_unused]] int argc, char *argv[]) {
   gMediaPath = ((new std::string(path.string()))->append(std::string("/media"))).c_str();
   printf("Media path: %s\n", gMediaPath);
 
-  if (!init())
-    throw initException();
-  if (!loadMedia())
-    throw mediaException();
+  if (!init()) throw initException();
+  if (!loadMedia()) throw mediaException();
 
   while (!gQuit) {
     switch (gNextScene) {
@@ -103,7 +101,8 @@ void runSceneMainMenu() {
   white->b = 255;
   white->a = 255;
 
-  auto *titleTextBox = new UI::TextBox(menuTextBoxOrigin, backgroundColor, white, nullptr, 0, nullptr, gcWindowTitle, titleFont);
+  auto *titleTextBox =
+      new UI::TextBox(menuTextBoxOrigin, backgroundColor, white, nullptr, 0, nullptr, gcWindowTitle, titleFont);
 
   titleTextBox->origin->x = (gScreenWidth / 2) - (titleTextBox->width / 2);
   titleTextBox->updateTexture();
@@ -112,10 +111,10 @@ void runSceneMainMenu() {
   newGameButtonOrigin->x = 0;
   newGameButtonOrigin->y = menuTextBoxOrigin->y + titleTextBox->height + 64;
 
-  auto *newGameButton = new UI::TextButton(newGameButtonOrigin, backgroundColor, white, nullptr, 0, nullptr, 0, 0, (char *) "New Game", menuFont);
+  auto *newGameButton = new UI::TextButton(newGameButtonOrigin, backgroundColor, white, nullptr, 0, nullptr, 0, 0,
+                                           (char *) "New Game", menuFont);
   newGameButton->updateTexture();
   newGameButton->origin->x = (gScreenWidth / 2) - (newGameButton->width / 2);
-
 
   bool continueMenu = true;
 
@@ -155,10 +154,7 @@ void runSceneInGame() {
   memset((void *) testMapPath, '\0', 4096);
   snprintf(testMapPath, 4096, "%s/testMap", gMediaPath);
 
-  currentMap = new map(testMapPath,
-                       testMapPath,
-                       4,
-                       8);
+  currentMap = new map(testMapPath, testMapPath, 4, 8);
 
   // TODO: Load world position from save file
   auto *worldPos = new SDL_Point();
@@ -193,16 +189,14 @@ void runSceneInGame() {
     }
 
     // Calculate camera position on the X axis, according to screen size and world size
-    if (player->worldPos->x < (gScreenWidth * 0.5) - (player->width * 0.5))
-      cameraWorldPos->x = 0;
+    if (player->worldPos->x < (gScreenWidth * 0.5) - (player->width * 0.5)) cameraWorldPos->x = 0;
     else if (player->worldPos->x > currentMap->pixelCountX() - (gScreenWidth * 0.5) - (player->width * 0.5))
       cameraWorldPos->x = currentMap->pixelCountX() - gScreenWidth;
     else
       cameraWorldPos->x = (int) (player->worldPos->x - (gScreenWidth * 0.5) + (player->width * 0.5));
 
     // Calculate camera position on the Y axis, according to screen size and world size
-    if (player->worldPos->y < (gScreenHeight * 0.5) - (player->height * 0.5))
-      cameraWorldPos->y = 0;
+    if (player->worldPos->y < (gScreenHeight * 0.5) - (player->height * 0.5)) cameraWorldPos->y = 0;
     else if (player->worldPos->y > currentMap->pixelCountY() - (gScreenHeight * 0.5) - (player->height * 0.5))
       cameraWorldPos->y = currentMap->pixelCountY() - gScreenHeight;
     else
@@ -269,18 +263,10 @@ bool inGameKeyboardHandler(character *player) {
     printf("Quit requested, shutting down");
     quit = true;
   }
-  if (gKeyboardState[SDL_SCANCODE_W]) {
-    player->Move(0, -gMovementSpeed);
-  }
-  if (gKeyboardState[SDL_SCANCODE_S]) {
-    player->Move(0, gMovementSpeed);
-  }
-  if (gKeyboardState[SDL_SCANCODE_A]) {
-    player->Move(-gMovementSpeed, 0);
-  }
-  if (gKeyboardState[SDL_SCANCODE_D]) {
-    player->Move(gMovementSpeed, 0);
-  }
+  if (gKeyboardState[SDL_SCANCODE_W]) { player->Move(0, -gMovementSpeed); }
+  if (gKeyboardState[SDL_SCANCODE_S]) { player->Move(0, gMovementSpeed); }
+  if (gKeyboardState[SDL_SCANCODE_A]) { player->Move(-gMovementSpeed, 0); }
+  if (gKeyboardState[SDL_SCANCODE_D]) { player->Move(gMovementSpeed, 0); }
   return quit;
 }
 
